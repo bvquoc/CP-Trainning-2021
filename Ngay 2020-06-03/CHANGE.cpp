@@ -4,6 +4,7 @@ using namespace std;
 
 const int N = 10004, INF = INT_MAX;
 int n, s, a[N];
+
 int dp(int coins[], int N, int M) {
     int f[M+1];
 
