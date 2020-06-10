@@ -4,7 +4,7 @@ using namespace std;
 
 using ii = pair <int,int>;
 const int N = 502;
-int k, a, b, m;
+int k, a, b, m, d;
 bool inS[N][N];
 vector <int> sv[N];
 
@@ -37,6 +37,13 @@ void init() {
     }
 }
 
+vector <int> K;
+bool check(int p, int q) {
+    if (p>=q) return false;
+    int dd = q-p;
+    return (dd%d==0);
+}
+
 int32_t main(void) {
     FastIO;
     freopen("SET.INP","r",stdin);
@@ -53,6 +60,34 @@ int32_t main(void) {
                 cin >> p >> q;
                 cout << (inS[p][q] ? "YES" : "NO") << "\n";
             }
+        }
+    } else {  // Sub 1, 2, 3 (AC)
+        while (T--) {
+            cin >> k >> a >> b;
+            d = b-a;
+            for (int i=2;i<=sqrt(k);i++) {
+                if (k%i == 0) { 
+                    K.push_back(i);
+                    if (k/i != i) {
+                        K.push_back(k/i);
+                    }
+                }
+            }
+            while (d%k == 0) {
+                d /= k;
+            }
+            for (int x:K) {
+                while (d%x == 0) {
+                    d /= x;
+                }
+            }
+            cin >> m;
+            while (m--) {
+                int p, q;
+                cin >> p >> q;
+                cout << (check(p,q) ? "YES" : "NO") << "\n";
+            }
+            K.clear();
         }
     }
     
