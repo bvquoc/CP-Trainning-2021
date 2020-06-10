@@ -3,17 +3,13 @@
 using namespace std;
 #define int unsigned long long
 
-const int N = 10004;
-int n, k, a[N], res;
-
-int __lcm(int a, int b) {
-    return (a*b)/__gcd(a,b);
-}
+const int N = 10004, A_i = 44;
+int n, k, a[N], cnt[A_i];
+int res = 1;
 
 int sqr(int x) {
     return x*x;
 }
-
 int pw(int a, int b) {
     if (b == 0) return 1;
     else {
@@ -25,7 +21,7 @@ int pw(int a, int b) {
     }
 }
 
-int32_t main(void) {
+int32_t main() {
     FastIO;
     freopen("POWER.INP","r",stdin);
     freopen("POWER.OUT","w",stdout);
@@ -34,20 +30,40 @@ int32_t main(void) {
         cin >> a[i];
     }
 
-    int bcnn = __lcm(a[1], a[2]);
-    for(int i=3; i<=n; i++) {
-        bcnn = __lcm(bcnn, a[i]);    
-    }
+    vector <int> primes;
+    primes.push_back(2);
+    primes.push_back(3);
+    primes.push_back(5);
+    primes.push_back(7);
+    primes.push_back(11);
+    primes.push_back(13);
+    primes.push_back(17);
+    primes.push_back(19);
+    primes.push_back(23);
+    primes.push_back(29);
+    primes.push_back(31);
+    primes.push_back(37);
+    primes.push_back(41);
+    primes.push_back(43);
 
-    for (int i=1; i<=bcnn; i++) {
-        if (pw(i,k)%bcnn == 0) {
-            // cout<<pw(i,k)<<endl;
-            res = i;
-            break;
+    for (int i=1; i<=n; i++) {
+        for (int j: primes) {
+            int cur = 0;
+            while (a[i]%j == 0) {
+                cur++;
+                a[i] /= j;
+            }
+            cnt[j] = max(cnt[j], cur);
         }
     }
-    // cout<<bcnn<<endl;
-    cout<<res;
+
+    for (int i: primes) {
+        if (cnt[i]) {
+            res *= pw(i,(cnt[i]+k-1)/k);
+        }
+    }
+
+    cout << res;
     return 0;
 }
 
@@ -57,8 +73,7 @@ int32_t main(void) {
 // #define int unsigned long long
 
 // const int N = 10004;
-// int n, k, a[N], res = LLONG_MAX;
-// int minPrime[100000000];
+// int n, k, a[N], res;
 
 // int __lcm(int a, int b) {
 //     return (a*b)/__gcd(a,b);
@@ -79,15 +94,6 @@ int32_t main(void) {
 //     }
 // }
 
-// vector<int> factorize (int n) {
-//     vector<int> res;
-//     while (n != 1) {
-//         res.push_back(minPrime[n]);
-//         n /= minPrime[n];
-//     }
-//     return res;
-// }
-
 // int32_t main(void) {
 //     FastIO;
 //     freopen("POWER.INP","r",stdin);
@@ -99,30 +105,17 @@ int32_t main(void) {
 
 //     int bcnn = __lcm(a[1], a[2]);
 //     for(int i=3; i<=n; i++) {
-//         bcnn = __lcm(bcnn, a[i]);    
+//         bcnn = __lcm(bcnn, a[i]);
 //     }
 
-//     // for (int i=2; i*i <= bcnn; ++i) {
-//     //     if (minPrime[i] == 0) {
-//     //         for (int j=i*i; j<=bcnn; j+=i) {
-//     //             if (minPrime[j]==0) {
-//     //                 minPrime[j]=i;
-//     //             }
-//     //         }
-//     //     }
-//     // }
-//     // for (int i=2; i<=bcnn; ++i) {
-//     //     if (minPrime[i]==0) {
-//     //         minPrime[i]=i;
-//     //     }
-//     // }
-    
-//     // for (int x: factorize(bcnn)) {
-//     //     if (pw((bcnn/x),k)%bcnn == 0) {
-//     //         res = min(res, (bcnn/x));
-//     //     }
-//     // }
-//     // cout<<res;
-//     cout<<bcnn;
+//     for (int i=1; i<=bcnn; i++) {
+//         if (pw(i,k)%bcnn == 0) {
+//             // cout<<pw(i,k)<<endl;
+//             res = i;
+//             break;
+//         }
+//     }
+//     // cout<<bcnn<<endl;
+//     cout<<res;
 //     return 0;
 // }
