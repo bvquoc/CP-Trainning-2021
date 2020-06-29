@@ -7,41 +7,20 @@ int n, m, m_max = 0;
 int res = 0;
 vector <int> a, c[N];
 
+int f[10000007];
+void Sub1_2() {
 
-vector<int> f;
-int solve1(int n) {
-    f.assign(n+1,0);
-    f[1] = a[1];
-    for (int i=2; i<=n; i++) {
-        for (int j=0;j<i;j++) {
-            if (a[i]>=a[j]) {
-                f[i] = max(f[i], f[j] + a[i]);
-            }
+    // a[] = { 1,2,2,1,2,2 } -> 9
+    for (int i=1; i<=m; i++) {
+        for (int j=0; j<=a[i]; j++) {
+            f[a[i]] = max(f[a[i]], f[j]+a[i]);
         }
+        cerr << f[a[i]] << ' ';
     }
-    return *max_element(f.begin(),f.end());
-}
-int solve2(int n) {
-    f.assign(n+1,0);
-    f[1] = 1;
-	int ans = 1;
-	for (int i=2; i<=n; i++) {
-		int l = 1, r = ans, j = 0;
-		while (l <= r) {
-			int m = (l+r)/2;
-			if (a[i] >= a[f[m]]) {
-				j = m;
-				l = m+1;
-			} else r = m-1;
-		}
-		if (j == ans) f[++ans] = i;
-		if (a[i] < a[f[j+1]]) f[j+1] = i;
-	}
-    int tmp = ans; ans = 0;
-    while (tmp!=0) {
-        ans += a[f[tmp--]];
+    
+    for (int i=1; i<=m; i++) {
+        res = max(res, f[a[i]]);
     }
-    return ans;
 }
 
 int32_t main(void) {
@@ -72,7 +51,7 @@ int32_t main(void) {
             }
         }
         m = a.size()-1;
-        res = ((m<=N) ? solve1(m) : solve2(m));
+        Sub1_2();
         cout << res;
         return 0;
     }
@@ -80,8 +59,6 @@ int32_t main(void) {
     cout << res;
     return 0;
 }
-
-
 
 
 // int z[30];
