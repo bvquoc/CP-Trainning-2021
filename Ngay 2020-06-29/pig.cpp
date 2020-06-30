@@ -2,7 +2,7 @@
 #define FastIO ios::sync_with_stdio(0); cin.tie(nullptr); cout.tie(nullptr);
 using namespace std;
 
-const int N = 1003;
+const int N = 1000006;
 int n, m, m_max = 0;
 int res = 0;
 vector <int> a, c[N];
