@@ -4,9 +4,8 @@ using namespace std;
 
 const int N = 1000006;
 using ii = pair <int,int>;
-int n, m, m_max = 0;
+int n, m;
 int res = 0;
-vector <int> a;
 set<int, greater<int> > c[N];
 
 struct MaxST{
@@ -43,23 +42,6 @@ struct MaxST{
 const int T_size = 1000006;
 MaxST T(T_size);
 
-void Sub1_2() {
-    for (int i=1; i<=m; i++) {
-        T.update(1, 0, T_size,a[i], T.getmax(1,0,T_size,0,a[i]) + a[i]);
-    }
-    
-    res = T.getmax(1, 0, T_size, 0, T_size);
-}
-
-void Sub3_4() {
-    for (int i=1; i<=n; i++) {
-        for (int x: c[i]) {
-            T.update(1, 0, T_size,x, T.getmax(1,0,T_size,0,x) + x);
-        }
-    }
-    res = T.getmax(1, 0, T_size, 0, T_size);
-}
-
 int32_t main(void) {
     FastIO;
     freopen("pig.inp","r",stdin);
@@ -67,32 +49,18 @@ int32_t main(void) {
     cin >> n;
     for (int i=1; i<=n; i++) {
         cin >> m;
-        m_max = max(m_max, m);
         for (int j=1; j<=m; j++) {
             int x; cin >> x;
             c[i].insert(x);
         }
     }
 
-    if (m_max == 0) {
-        cout << res;
-        return 0;
-    }
-    
-    if (m_max == 1) {
-        a.push_back(0);
-        for (int i=1; i<=n; i++) {
-            for (int x: c[i]) {
-                a.push_back(x);
-            }
+    for (int i=1; i<=n; i++) {
+        for (int x: c[i]) {
+            T.update(1, 0, T_size,x, T.getmax(1,0,T_size,0,x) + x);
         }
-        m = a.size()-1;
-        Sub1_2();
-        cout << res;
-        return 0;
-    } else {
-        Sub3_4();
     }
+    res = T.getmax(1, 0, T_size, 0, T_size);
     
     cout << res;
     return 0;
