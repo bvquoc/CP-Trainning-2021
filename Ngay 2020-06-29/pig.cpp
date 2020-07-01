@@ -3,9 +3,11 @@
 using namespace std;
 
 const int N = 1000006;
+using ii = pair <int,int>;
 int n, m, m_max = 0;
 int res = 0;
-vector <int> a, c[N];
+vector <int> a;
+set<int, greater<int> > c[N];
 
 struct MaxST{
 	vector <int> st, gt;
@@ -38,16 +40,23 @@ struct MaxST{
 	}
 };
 
-MaxST T;
+const int T_size = 1000006;
+MaxST T(T_size);
 
 void Sub1_2() {
-    int T_size = *max_element(a.begin(),a.end());
-    T.assign(T_size);
-    // a[] = { 1,2,2,1,2,2 } -> 9
     for (int i=1; i<=m; i++) {
         T.update(1, 0, T_size,a[i], T.getmax(1,0,T_size,0,a[i]) + a[i]);
     }
     
+    res = T.getmax(1, 0, T_size, 0, T_size);
+}
+
+void Sub3_4() {
+    for (int i=1; i<=n; i++) {
+        for (int x: c[i]) {
+            T.update(1, 0, T_size,x, T.getmax(1,0,T_size,0,x) + x);
+        }
+    }
     res = T.getmax(1, 0, T_size, 0, T_size);
 }
 
@@ -59,9 +68,9 @@ int32_t main(void) {
     for (int i=1; i<=n; i++) {
         cin >> m;
         m_max = max(m_max, m);
-        c[i].assign(m+1,0);
         for (int j=1; j<=m; j++) {
-            cin >> c[i][j];
+            int x; cin >> x;
+            c[i].insert(x);
         }
     }
 
@@ -73,15 +82,16 @@ int32_t main(void) {
     if (m_max == 1) {
         a.push_back(0);
         for (int i=1; i<=n; i++) {
-            int m = c[i].size()-1;
-            for (int j=1; j<=m; j++) {
-                a.push_back(c[i][j]);
+            for (int x: c[i]) {
+                a.push_back(x);
             }
         }
         m = a.size()-1;
         Sub1_2();
         cout << res;
         return 0;
+    } else {
+        Sub3_4();
     }
     
     cout << res;
