@@ -15,18 +15,6 @@ int distance(int X1, int Y1, int X2, int Y2) {
     return max(abs(X1-X2),abs(Y1-Y2));
 }
 
-void solve_sub_1_2() {
-    for (int i=1; i<=m; i++) {
-        for (int j=1; j<=n; j++) {
-            int cur = 0;
-            for (ii x: robot) {
-                cur = max(cur, distance(x.fi, x.se, i, j));
-            }
-            res = min(res, cur);
-        }
-    }
-}
-
 int32_t main(void) {
     FastIO;
     freopen("robot.inp","r",stdin);
@@ -46,7 +34,15 @@ int32_t main(void) {
     }
 
     if (sub1_2) {
-        solve_sub_1_2();
+        for (int i=1; i<=m; i++) {
+            for (int j=1; j<=n; j++) {
+                int cur = 0;
+                for (ii x: robot) {
+                    cur = max(cur, distance(x.fi, x.se, i, j));
+                }
+                res = min(res, cur);
+            }
+        }
     } else {
         res = 0;
     }
