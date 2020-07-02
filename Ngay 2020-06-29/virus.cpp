@@ -11,15 +11,8 @@ int X1, Y1, X2, Y2;
 vector < vector <int> > a;
 vector < vector <bool> > mark;
 
-struct data 
-{
-    int a, b, c, d;
-} dt[K];
-struct query 
-{
-    int t, id, ans;
-} q[1000006];
-
+struct data { int a, b, c, d; } dt[K];
+struct query { int t, id, ans; } q[1000006];
 
 void fill(int x, int y, int cnt_x, int cnt_y) {
     for (int i=0; i<cnt_x; i++) {
@@ -75,11 +68,9 @@ void solve(int t) {
         return;
     }
     cur_s += (t-cur_t)*2;
-    // cerr << cur_s << endl;
     for (int step=1; step<=t-cur_t; step++) {
         upper();
     }
-    // cerr << endl;
     cur_t = t;
 }
 
@@ -113,13 +104,6 @@ int32_t main(void) {
         }
     }
 
-    // for (int i=1; i<=m; i++) {
-    //     for (int j=1; j<=n; j++) {
-    //         cout << a[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
-
     cin >> q_cnt;
     for (int i=1; i<=q_cnt; i++) {
         cin >> q[i].t;
@@ -134,8 +118,6 @@ int32_t main(void) {
     }
 
     for (int i=1; i<=q_cnt; i++) {
-        // cerr << "curr_ans " << res << endl;
-        // cerr << "time " << q[i].t << endl;
         solve(q[i].t);
         q[i].ans = res;
     }
