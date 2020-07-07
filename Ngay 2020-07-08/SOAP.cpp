@@ -20,6 +20,5 @@ int32_t main(void) {
         int p = lower_bound(a+1,a+1+n,x)-a;
         cout << p-1 << '\n';
     }
-    
     return 0;
 }
