@@ -23,9 +23,9 @@ int32_t main(void) {
     }
     if (cnt == 0) {
         ans = max_neg;
-        cnt = 0;
+        cnt = 1;
         for (int i=1; i<=n; i++) {
-            if (a[i]==max_neg) {
+            if (a[i]==0) {
                 cnt++;
             }
         }
