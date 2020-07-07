@@ -21,6 +21,10 @@ int32_t main(void) {
             sum_neg += a[i];
         }
     }
+    if (cnt_pos == 0) {
+        sum_pos = sum_neg;
+        cnt_pos = n;
+    }
     cout << sum_pos << ' ' << cnt_pos;
     return 0;
 }
