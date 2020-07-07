@@ -5,7 +5,7 @@ using namespace std;
 
 const int N = 100005;
 int n, a[N];
-int sum_pos = 0, cnt_pos = 0, sum_neg = 0;
+int ans = 0, cnt = 0, max_neg = LLONG_MIN;
 
 int32_t main(void) {
     FastIO;
@@ -15,16 +15,21 @@ int32_t main(void) {
     for (int i=1; i<=n; i++) {
         cin >> a[i];
         if (a[i]>=0) {
-            cnt_pos++;
-            sum_pos += a[i];
+            cnt++;
+            ans += a[i];
         } else {
-            sum_neg += a[i];
+            max_neg = max(max_neg,a[i]);
         }
     }
-    if (cnt_pos == 0) {
-        sum_pos = sum_neg;
-        cnt_pos = n;
+    if (cnt == 0) {
+        ans = max_neg;
+        cnt = 0;
+        for (int i=1; i<=n; i++) {
+            if (a[i]==max_neg) {
+                cnt++;
+            }
+        }
     }
-    cout << sum_pos << ' ' << cnt_pos;
+    cout << ans << ' ' << cnt;
     return 0;
 }
