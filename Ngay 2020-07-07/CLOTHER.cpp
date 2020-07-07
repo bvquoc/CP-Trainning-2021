@@ -17,7 +17,11 @@ int32_t main(void) {
     for (int i=1; i<=m; i++) {
         cin >> a[i];
     }
-    sort(a+1,a+1+n);
-    
+    sort(a+1,a+1+m);
+    sort(t+1,t+1+n);
+    for (int i=1;i<=n;i++) {
+        int T = t[i]-t[i-1];
+        
+    }
     return 0;
 }
