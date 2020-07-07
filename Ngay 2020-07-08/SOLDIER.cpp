@@ -20,7 +20,7 @@ int32_t main(void) {
     int q; cin >> q;
     while (q--) {
         int x; cin >> x;
-        int p = lower_bound(a+1,a+1+n,x)-a;
+        int p = upper_bound(a+1,a+1+n,x)-a-1;
         if (p>n) p=n;
         cout << p << ' ' << psum[p] << '\n';
     }
