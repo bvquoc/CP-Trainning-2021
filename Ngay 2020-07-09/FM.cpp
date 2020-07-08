@@ -1,37 +1,27 @@
 #include <bits/stdc++.h>
 #define FastIO ios::sync_with_stdio(0); cin.tie(nullptr); cout.tie(nullptr);
 using namespace std;
+#define int long long
 
-const int N = 100005, M = 2000006;
-int n, m, a[N], p[M];
+const int N = 2000006;
+int n, m, a[N];
 int res = 0;
 
 int32_t main(void) {
     FastIO;
     freopen("FM.INP","r",stdin);
     freopen("FM.OUT","w",stdout);
-    cin >> n >> m;
+    scanf("%lld%lld", &n, &m);
     for (int i=1; i<=n; i++) {
-        cin >> a[i];
+        scanf("%lld",&a[i]);
     }
     
-    if (n<=1000) {
-        for (int i=1; i<n; i++) {
-            for (int j=i+1; j<=n; j++) {
-                p[a[i]+a[j]]++;
-            }
-        }
-        for (int i=1; i<=m; i++) {
-            res += p[i];
-        }
-    } else {
-        sort(a+1,a+1+n);
-        for (int i=1;i<=n;i++) {
-            int x = m-a[i];
-            int p = upper_bound(a+1,a+1+n,x)-a-i-1;
-            res += max(0,p);
-        }
+    sort(a+1,a+1+n);
+    for (int i=1;i<=n;i++) {
+        int p = upper_bound(a+1+i,a+1+n,m-a[i])-a-i-1;
+        if (p<=0) break;
+        res += p;
     }
-    cout << res;
+    printf("%lld",res);
     return 0;
 }
