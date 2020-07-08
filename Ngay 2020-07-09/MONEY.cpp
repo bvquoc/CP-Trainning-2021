@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #define FastIO ios::sync_with_stdio(0); cin.tie(nullptr); cout.tie(nullptr);
 using namespace std;
-#define int long long
+#define int unsigned long long
 
 const int N = 100005;
 int n, g, s, k;
@@ -28,13 +28,20 @@ int32_t main(void) {
     if (cur < sum) {
         cout << '-' << '1';
     } else {
-        cur -= sum;
-        res.k = cur%29;
-        cur -= res.k;
-        res.s = (cur/29)%17;
-        cur -= res.s*29;
-        res.g = cur/(29*17);
+        if (g>=g_sum && s>=s_sum && k>=k_sum) {
+            res.g = g-g_sum;
+            res.s = s-s_sum;
+            res.k = k-k_sum;
+        } else {
+            cur -= sum;
+            res.k = cur%29;
+            cur -= res.k;
+            res.s = (cur/29)%17;
+            cur -= res.s*29;
+            res.g = cur/(29*17);
+        }
         cout << res.g << ' ' << res.s << ' ' << res.k;
+        
     }
     return 0;
 }
