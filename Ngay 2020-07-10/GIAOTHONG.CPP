@@ -27,7 +27,7 @@ int32_t main() {
     b.resize(n+1,true);
     d[1] = 0LL; f[1] = 1ll;
     for (int tmp=n;tmp--;) {
-        int u=-1;
+        int u = -1;
         for (int v=1; v<=n; v++) if (b[v] && (u == -1 || d[u] > d[v])) u = v;
         if (u==-1 || u==n) break;
         b[u]=false;
@@ -39,6 +39,6 @@ int32_t main() {
             } else if (d[v]==d[u]+l) f[v] += f[u];
         }
     }
-    cout<<d[n]<<" "<<f[n];
+    cout << d[n] << ' ' << f[n];
     return 0;
 }
