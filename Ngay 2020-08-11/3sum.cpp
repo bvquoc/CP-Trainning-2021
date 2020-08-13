@@ -45,7 +45,7 @@ vector <int> pos[2*INF];
 vector <data> q;
 
 struct BIT_SumQuery {
-    int bit[2*INF], n = INF*2 - 1;
+    int bit[N];
     int sum(int r) {
         int ret = 0;
         for (; r >= 1; r = (r & (r + 1)) - 1)
