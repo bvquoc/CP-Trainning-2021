@@ -12,7 +12,7 @@ using ii = pair <int, int>;
 using ld = long double;
 
 int n, m, res = 0;
-set <int> a, b;
+multiset <int> a, b;
 
 signed main(void) {
     FastIO;
