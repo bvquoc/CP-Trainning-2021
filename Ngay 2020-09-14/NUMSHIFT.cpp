@@ -20,9 +20,9 @@ signed main(void) {
     freopen("NUMSHIFT.OUT","w",stdout);
     cin >> n;
     cnt_bit1 = __builtin_popcountll(n);
-    cur  = 64LL - __builtin_clzll(n) - 1;
-    FOR (i,2,cnt_bit1) {
-        res += pow(2,cur--);
+    cur  = 64LL - __builtin_clzll(n);
+    FOR (i,1,cnt_bit1) {
+        res += pow(2,--cur);
     }
     cout << res;
     return 0;
