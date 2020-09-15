@@ -11,18 +11,39 @@ using namespace std;
 using ii = pair <int, int>;
 using ld = long double;
 
-int n, cnt_bit1, cur;
-int res = 0;
+int n, res;
+
+string Dec_to_Bin(int x) {
+    string s = "";
+    while (x != 0) {
+        s.push_back('0'+(x%2));
+        x = x >> 1;
+    }
+    reverse(s.begin(),s.end());
+    return s;
+}
+
+int getAns(string x) {
+    int ans = 0, sz = x.length();
+    FOR(i,0,sz-1) {
+        ans += (x[i]-'0')*pow(2,sz-i-2);
+    }
+    return ans;
+}
 
 signed main(void) {
     FastIO;
     freopen("NUMSHIFT.INP","r",stdin);
     freopen("NUMSHIFT.OUT","w",stdout);
     cin >> n;
-    cnt_bit1 = __builtin_popcountll(n);
-    cur  = 64LL - __builtin_clzll(n);
-    FOR (i,1,cnt_bit1) {
-        res += pow(2,--cur);
+    string s = Dec_to_Bin(n), cur;
+    signed sz = s.length();
+    FOR(i,0,sz-1) {
+        cur = "";
+        FOR(j,i,i+sz) {
+            cur += s[j%sz];
+        }
+        res = max(res, getAns(cur));
     }
     cout << res;
     return 0;
