@@ -1,75 +1,54 @@
+// The following code for APIO 2010 "Commando" was contributed by Haidar Abboud.
 #include <bits/stdc++.h>
-#define FastIO ios::sync_with_stdio(0); cin.tie(nullptr); cout.tie(nullptr);
-#define FOR(i, a, b) for(int i=a; i<=b; i++)
-#define FORD(i, a, b) for(int i=a; i>=b; i--)
-#define endl '\n'
-
+#define FastIO ios::sync_with_stdio(0); cin.tie(NULL); cout.tie(NULL);
 using namespace std;
 
-template <typename T>
-inline void Read(T& x) {
-    bool Neg = false;
-    char c;
-    for (c = getchar(); c < '0' || c > '9'; c = getchar())
-        if (c == '-') Neg = !Neg;
-    x = c - '0';
-    for (c = getchar(); c >= '0' && c <= '9'; c = getchar())
-        x = x * 10 + c - '0';
-    if (Neg) x = -x;
-}
-
-template <typename T>
-inline void Write(T x) {
-    if (x < 0) { putchar('-'); x = -x; }
-    T p = 1;
-    for (T temp = x / 10; temp > 0; temp /= 10) p *= 10;
-    for (; p > 0; x %= p, p /= 10) putchar(x / p + '0');
-}
-
 using ll = long long;
-using ld = long double;
 
 const int N = 1000006;
-const ll INF = 1e18;
+int n, a, b, c, x[N];
+ll sum[N], dp[N];
+// The convex hull trick code below was derived from acquire.cpp
+vector<ll> M, B;
 
-int n, a, b, c;
-int s[N];
-ll dp[N], p[N], q[N];
-int k;
-ld x[N];
-
-bool ok (int i) {
-    ll P = -2LL*a*s[i];
-    ll Q = dp[i] + 1LL*a*s[i]*s[i] - 1LL*b*s[i];
-    ld xm = (ld) (Q-q[k]) / (p[k]-P);
-    ld xn = (ld) (Q-q[k-1]) / (p[k-1]-P);
-    return (xn<xm);
+bool bad(int l1, int l2, int l3) {
+    return (B[l3] - B[l1]) * (M[l1] - M[l2]) < (B[l2] - B[l1]) * (M[l1] - M[l3]);
 }
-
+void add(ll m, ll b) {
+    M.push_back(m);
+    B.push_back(b);
+    while (M.size() >= 3 && bad(M.size() - 3, M.size() - 2, M.size() - 1)) {
+        M.erase(M.end() - 2);
+        B.erase(B.end() - 2);
+    }
+}
+int pointer;
+ll query(ll x) {
+    if (pointer >= M.size())
+        pointer = M.size() - 1;
+    while (pointer < M.size() - 1 &&
+           M[pointer + 1] * x + B[pointer + 1] > M[pointer] * x + B[pointer])
+        pointer++;
+    return M[pointer] * x + B[pointer];
+}
 
 signed main() {
     FastIO;
-    freopen ("COMMANDO.INP", "r", stdin);
-    freopen ("COMMANDO.OUT", "w", stdout);
-    Read(n); Read(a); Read(b); Read(c);
-    FOR(i,1,n) Read(s[i]);
-    s[0] = 0;
-    FOR(i,1,n) s[i] += s[i-1];
-
-    dp[0] = 0;
-    k = 0, x[0] = -INF, p[0] = 0;
-    q[1] = 0;
-    int u = 0;
-    FOR(i,1,n) {
-        while (u<=k && x[u] <= s[i]) ++u;
-        --u;
-        dp[i] = 1LL*a*s[i]*s[i] + 1LL*b*s[i] + c + q[u] + 1LL*p[u]*s[i];
-        while (k>0 && !ok(i))
-            --k;
-        p[++k] = -2LL*a*s[i];
-        q[k] = dp[i] + 1LL*a*s[i]*s[i] - 1LL*b*s[i];
-        x[k] = (ld) (q[k]-q[k-1]) / (p[k-1]-p[k]);
+    freopen("COMMANDO.INP", "r", stdin);
+    freopen("COMMANDO.OUT", "w", stdout);
+    scanf("%d", &n);
+    scanf("%d %d %d", &a, &b, &c);
+    for (int i = 1; i <= n; i++) {
+        scanf("%d", &x[i]);
+        sum[i] = sum[i - 1] + x[i];
     }
-    Write(dp[n]);
+    dp[1] = a * x[1] * x[1] + b * x[1] + c;
+    add(-2 * a * x[1], dp[1] + a * x[1] * x[1] - b * x[1]);
+    for (int i = 2; i <= n; i++) {
+        dp[i] = a * sum[i] * sum[i] + b * sum[i] + c;
+        dp[i] = max(dp[i], b * sum[i] + a * sum[i] * sum[i] + c + query(sum[i]));
+        add(-2 * a * sum[i], dp[i] + a * sum[i] * sum[i] - b * sum[i]);
+    }
+    printf("%lld", dp[n]);
     return 0;
 }
