@@ -8,7 +8,6 @@ using ll = long long;
 const int N = 1000006;
 int n, a, b, c, x[N];
 ll sum[N], dp[N];
-// The convex hull trick code below was derived from acquire.cpp
 vector<ll> M, B;
 
 bool bad(int l1, int l2, int l3) {
