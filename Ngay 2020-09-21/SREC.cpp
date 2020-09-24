@@ -33,7 +33,7 @@ using ld = long double;
 using ii = pair<int, int>;
 using iii = pair<ii, ll>;
 
-const int N = 1000005;
+const int N = 1000006;
 const ll INF = 1e18;
 
 int n, k;
