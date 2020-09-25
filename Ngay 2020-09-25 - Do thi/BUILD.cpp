@@ -11,7 +11,7 @@ using namespace std;
 using ii = pair <int, int>;
 using ld = long double;
 
-const int N = 100005;
+const int N = 102;
 
 struct edge {
     int u, v, w;
@@ -32,7 +32,7 @@ bool join(int u, int v) {
     return true;
 }
 
-int n, c[5];
+int n, c[5], d[N][N];
 vector <edge> edges;
 
 signed main(void) {
@@ -45,6 +45,8 @@ signed main(void) {
         int u, v, w;
         while (cin >> u >> v >> w) {
             edges.push_back({u,v,w});
+            d[u][v] = w;
+            d[v][u] = w;
         }
         
     }
@@ -58,17 +60,27 @@ signed main(void) {
         rnk[i] = 0;
     }
 
-    vector <ii> res;
-    int mst_weight = 0;
+    int T[n+5];
+
     for (edge &e: edges) {
         if (join(e.u, e.v)) {
-            mst_weight += e.w;
-            res.push_back({e.u,e.v});
+            T[e.v] = e.u;
         }
     }
-    cout << mst_weight << endl;
-    for (ii x: res) {
-        cout << x.first << ' ' << x.second << endl;
+
+    set <ii> ans;
+    FOR(i,1,4) {
+        int x = c[i];
+        while (T[x]!=0) {
+            int u = x, v = T[x];
+            if (u>v) swap(u,v); 
+            ans.insert({u,v});
+            cout << "{" << u << ',' << v << "} "; 
+            x = T[x];
+        }
+        cout << endl;
     }
+
+    
     return 0;
 }
