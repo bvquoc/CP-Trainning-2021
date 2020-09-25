@@ -53,7 +53,6 @@ signed main(void) {
         return a.w < b.w;
     });
 
-    // Init Disjoint Set
     for (int i=1; i<=n; i++) {
         par[i] = i;
         rnk[i] = 0;
