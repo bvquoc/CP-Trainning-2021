@@ -11,29 +11,38 @@ using namespace std;
 using ii = pair <int, int>;
 using ld = long double;
 
-const int N = 102;
+const int N = 102, INF = 1000000000;
 
-struct edge {
-    int u, v, w;
-};
+int n, k[5];
+int res = INF;
+vector <vector <int>> a, b, cur;
 
-int par[N], rnk[N];
+int c[N], d[N], tr[N];
+void Find(int s, int t) {
 
-int find(int u) {
-    if (par[u] != u) par[u] = find(par[u]);
-    return par[u];
 }
-bool join(int u, int v) {
-    u = find(u); v = find(v);
-    if (u == v) return false;
-    if (rnk[u] == rnk[v]) rnk[u]++;
-    if (rnk[u] < rnk[v]) par[u] = v;
-    else par[v]=u;
-    return true;
+void dijkstra(int s, int t) {
+    priority_queue <ii, vector<ii>, greater<ii>> q;
+    FOR(i,1,n) {
+        c[i] = INF;
+        tr[i] = 0;
+        d[i] = 0;
+    }
+    c[s] = 0;
+    q.push(ii(0,s));
+    while (q.size()) {
+        int u = q.top().second; q.pop();
+        if (u==t || u==0) break;
+        d[u] = 1;
+        FOR(v,1,n) {
+            if (a[u][v]>0 && c[v]>c[u]+a[u][v]) {
+                c[v] = c[u] + a[u][v];
+                tr[v] = u;
+            }
+        }
+    }
+    Find(s,t);
 }
-
-int n, c[5], d[N][N];
-vector <edge> edges;
 
 signed main(void) {
     FastIO;
@@ -41,46 +50,25 @@ signed main(void) {
     freopen("BUILD.OUT","w",stdout);
     { // Read Input
         cin >> n;
-        FOR(i,1,4) cin >> c[i];
+        a.assign(n+1,vector <int> (n+1,0));
+        b.assign(n+1,vector <int> (n+1,0));
+        cur.assign(n+1,vector <int> (n+1,0));
+        FOR(i,1,4) cin >> k[i];
         int u, v, w;
         while (cin >> u >> v >> w) {
-            edges.push_back({u,v,w});
-            d[u][v] = w;
-            d[v][u] = w;
-        }
-        
-    }
-
-    sort(edges.begin(), edges.end(), [](const edge &a, const edge &b) {
-        return a.w < b.w;
-    });
-
-    for (int i=1; i<=n; i++) {
-        par[i] = i;
-        rnk[i] = 0;
-    }
-
-    int T[n+5];
-
-    for (edge &e: edges) {
-        if (join(e.u, e.v)) {
-            T[e.v] = e.u;
+            a[u][v] = w;
+            a[v][u] = w;
         }
     }
 
-    set <ii> ans;
-    FOR(i,1,4) {
-        int x = c[i];
-        while (T[x]!=0) {
-            int u = x, v = T[x];
-            if (u>v) swap(u,v); 
-            ans.insert({u,v});
-            cout << "{" << u << ',' << v << "} "; 
-            x = T[x];
+    FOR(i,1,n) {
+        b.assign(n+1, vector<int> (n+1,0));
+        FOR(j,1,4) dijkstra(k[j],i);
+        solve(Min);
+        if (res>Min) {
+            res = Min;
+            cur = b;
         }
-        cout << endl;
     }
-
-    
     return 0;
 }
