@@ -8,6 +8,26 @@
 #define int long long
 using namespace std;
 
+template <typename T>
+inline void Read(T& x) {
+    bool Neg = false;
+    char c;
+    for (c = getchar(); c < '0' || c > '9'; c = getchar())
+        if (c == '-') Neg = !Neg;
+    x = c - '0';
+    for (c = getchar(); c >= '0' && c <= '9'; c = getchar())
+        x = x * 10 + c - '0';
+    if (Neg) x = -x;
+}
+
+template <typename T>
+inline void Write(T x) {
+    if (x < 0) { putchar('-'); x = -x; }
+    T p = 1;
+    for (T temp = x / 10; temp > 0; temp /= 10) p *= 10;
+    for (; p > 0; x %= p, p /= 10) putchar(x / p + '0');
+}
+
 using ii = pair <int, int>;
 using ld = long double;
 using ll = long long;
@@ -45,13 +65,15 @@ void Try(int x,int y) {
 }
 
 signed main(void) {
-    FastIO;
     freopen("WGAME.INP","r",stdin);
     freopen("WGAME.OUT","w",stdout);
-    cin >> m >> n >> D;
-    cin >> s;
+    Read(m); Read(n); Read(D);
+    getline(cin,s);
     a.assign(m+2,vector <char>(n+2, '#'));
-    FOR(i,1,m) FOR(j,1,n) cin >> a[i][j];
+    FOR(i,1,m) {
+        FOR(j,1,n) a[i][j] = getchar();
+        getchar();
+    } 
 
     { // Subtask 2 
         set <char> c;
@@ -75,6 +97,6 @@ signed main(void) {
     }
 
     Try(1,1);
-    cout << res;
+    Write(res);
     return 0;
 }

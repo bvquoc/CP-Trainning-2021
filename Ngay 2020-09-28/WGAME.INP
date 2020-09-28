@@ -1,3 +1,16 @@
+4 4 100
+abc
+aabc
+ab#b
+acba
+aaaa
+
+2 2 100
+b
+ab
+aa
+
+
 10 10 131
 aa
 aaaaaaaaaa
@@ -12,7 +25,3 @@ aaaaaaaaaa
 aaaaaaaaaa
 
 
-2 2 100
-b
-ab
-aa
