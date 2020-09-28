@@ -5,15 +5,14 @@
 #define FOR(i, a, b) for(int i=a; i<=b; i++)
 #define FORD(i, a, b) for(int i=a; i>=b; i--)
 #define endl '\n'
-#define int long long
 using namespace std;
 
 using ii = pair <int, int>;
 using ll = long long;
 using ld = long double;
 
-const int N = 100005, INF = 1e18;
-int n, m, k, d[N];
+const int N = 100005, INF = INT_MAX;
+int n, m, d[N]; ll k;
 vector <ii> a[N];
 
 void dijkstra(){
@@ -24,13 +23,12 @@ void dijkstra(){
     pq.push(ii(0, 1));
 
     while (pq.size()){
-        int u = pq.top().second;
-        int du = pq.top().first;
+        int u = pq.top().se, du = pq.top().first;
         pq.pop();
         if (du!=d[u]) continue;
 
-        for (ii tmp: a[u]) {
-            int v = tmp.second, uv = tmp.first;
+        for (ii ke: a[u]) {
+            int v = ke.second, uv = ke.first;
             if (d[v] > du+uv) {
                 d[v] = du+uv;
                 pq.push(ii(d[v], v));
@@ -39,8 +37,8 @@ void dijkstra(){
     }
 }
 
-bool check(int t) {
-    int cur = 0;
+bool check(ll t) {
+    ll cur = 0;
     FOR(i,2,n) {
         cur += (t/d[i]);
     }
@@ -59,10 +57,10 @@ signed main(void) {
     }
     dijkstra();
 
-    int res = INF;
-    int l = 0, r = 1e18;
+    ll res = LLONG_MAX;
+    ll l = 0, r = 1e18, mid;
     while (l<=r) {
-        int mid = (l+r)/2;
+        mid = (l+r)/2;
         if (check(mid)) {
             r = mid-1;
             res = min(res,mid);
