@@ -19,7 +19,7 @@ string s;
 vector < vector <char> > a;
 ll res = 0;
 vector <ii> path;
-vector <vector <int>> f;
+vector < vector <int> > f;
 
 void Try(int x,int y) {
     if (a[x][y] == '#') return;
