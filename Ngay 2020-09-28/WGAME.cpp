@@ -52,7 +52,10 @@ signed main(void) {
     cin >> s;
     a.assign(m+2,vector <char>(n+2, '#'));
     FOR(i,1,m) FOR(j,1,n) cin >> a[i][j];
-    Try(1,1);
-    cout << res;
+    if (m<=10 && n<=10) { // Subtask 1
+        Try(1,1);
+        cout << res;
+        return 0;
+    }
     return 0;
 }
