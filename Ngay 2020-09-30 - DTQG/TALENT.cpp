@@ -29,7 +29,7 @@ signed main() {
     }
     while (m--) {
         cin >> p;
-        int i = lower_bound(d+1,d+1+n,p) - d;
+        int i = upper_bound(d+1,d+1+n,p) - d;
         cur = pw[i-1]*p - pp[i-1];
         if (i<=n) cur += (pp[n]-pp[i-1])-(pw[n]-pw[i-1])*p;
         cout << cur << endl;
