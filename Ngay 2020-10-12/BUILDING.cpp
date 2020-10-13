@@ -7,6 +7,18 @@
 #define endl '\n'
 using namespace std;
 
+template <typename T>
+inline void Read(T& x) {
+    bool Neg = false;
+    char c;
+    for (c = getchar(); c < '0' || c > '9'; c = getchar())
+        if (c == '-') Neg = !Neg;
+    x = c - '0';
+    for (c = getchar(); c >= '0' && c <= '9'; c = getchar())
+        x = x * 10 + c - '0';
+    if (Neg) x = -x;
+}
+
 using ii = pair <int, int>;
 using ld = long double;
 using ll = long long;
@@ -20,8 +32,8 @@ signed main(void) {
     FastIO;
     freopen("BUILDING.INP","r",stdin);
     freopen("BUILDING.OUT","w",stdout);
-    cin >> m >> n;
-    FOR(i,1,m) FOR(j,1,n) cin >> h[i][j];
+    Read(m); Read(n);
+    FOR(i,1,m) FOR(j,1,n) Read(h[i][j]);
 
     FOR(i,1,max(m,n)) row[i] = col[i] = 0;
     FOR(i,1,m) {
@@ -53,6 +65,6 @@ signed main(void) {
 
     int res = 0;
     FOR(i,1,m) FOR(j,1,n) if (!mark[i][j]) res++;
-    cout << res;
+    printf("%d", res);
     return 0;
 }
