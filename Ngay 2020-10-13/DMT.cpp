@@ -41,7 +41,11 @@ int n; ll LIM = -1;
 pair <ll, ll> q[N];
 map <ll, int> cnt;
 
-
+void prepare(ll n) {
+    for (ll i=2LL; i*i<=n; i++) {
+        if ()
+    }
+}
 
 signed main(void) {
     FastIO;
@@ -49,12 +53,12 @@ signed main(void) {
     freopen("DMT.OUT","w",stdout);
     Read(n);
     FOR(i,1,n) {
-        Read(q[i].first);
-        Read(q[i].second);
+        Read(q[i].first); Read(q[i].second);
         if (q[i].first > q[i].second) swap(q[i].first, q[i].second);
         maximize(LIM, q[i].second);
     }
-    cout << LIM;
+    
+    prepare(LIM);
 
     return 0;
 }
