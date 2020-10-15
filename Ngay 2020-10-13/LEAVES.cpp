@@ -57,6 +57,12 @@ ll P(int k) {
     return Min_P;
 }
 
+ll solve(int k) {
+    ll cur = 0;
+    FOR(i,1,k) cur += (ll)a[i].first + 1LL*a[i].second*k;
+    return cur;
+}
+int K;
 signed main(void) {
     FastIO;
     freopen("LEAVES.INP","r",stdin);
@@ -67,24 +73,26 @@ signed main(void) {
         a[i].second = i;
     }
 
-    sort(a+1, a+1+n);
-    FOR(i,1,n) {
-        psum[i] = psum[i-1] + 1LL*a[i].first;
-        p_id[i] = p_id[i-1] + a[i].second;
-    }
 
     int res = 0, cost = 0;
     int l = 0, r = n;
     while (l <= r) {
-        int mi = l + (r-l)/2;
-        if (P(mi) <= S) {
-            res = max(res, mi);
-            l = mi+1;
-        } else r = mi-1;
+        K = l + (r-l)/2;
+        sort(a+1, a+1+n,[](const ii &A, const ii &B) {
+            return A.first + A.second*K < B.first + B.second*K;
+        });
+        if (solve(K) <= S) {
+            res = max(res, K);
+            l = K+1;
+        } else r = K-1;
     }
 
+    K = res;
+    sort(a+1, a+1+n,[](const ii &A, const ii &B) {
+        return A.first + A.second*K < B.first + B.second*K;
+    });
     Write(res); putchar(' ');
-    if (res) Write(P(res));
-    else putchar('0');
+    if (res) Write(solve(res));
+    // else putchar('0');
     return 0;
 }
