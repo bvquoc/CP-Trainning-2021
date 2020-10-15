@@ -96,6 +96,7 @@ void getList(ll lim) {
 int getAns(ll k) {
     int p = lower_bound(a.begin(), a.end(), k) - a.begin();
     if (p == a.size()) return p;
+    if (a[p] == k) p++;
     return p;
 }
 
