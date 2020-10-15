@@ -59,7 +59,10 @@ ll P(int k) {
 
 ll solve(int k) {
     ll cur = 0;
-    FOR(i,1,k) cur += (ll)a[i].first + 1LL*a[i].second*k;
+    FOR(i,1,k) {
+        cur += (ll)a[i].first + 1LL*a[i].second*k;
+        if (cur > S) break;
+    }
     return cur;
 }
 int K;
