@@ -39,12 +39,64 @@ using ld = long double;
 const int N = 1000006;
 int n; ll LIM = -1;
 pair <ll, ll> q[N];
-map <ll, int> cnt;
+vector <ll> a;
+ll primeDiv[10000007];
 
 void prepare(ll n) {
-    for (ll i=2LL; i*i<=n; i++) {
-        if ()
+    for (ll i = 2; i * i <= n; ++i) {
+        if (primeDiv[i] == 0) {
+            for (ll j = i * i; j <= n; j += i) {
+                if (primeDiv[j] == 0) {
+                    primeDiv[j] = i;
+                }
+            }
+        }
     }
+    for (ll i = 2; i <= n; ++i) {
+        if (primeDiv[i] == 0) {
+            primeDiv[i] = i;
+        }
+    }
+}
+
+vector<pair<ll,int>> factorize(int n) {
+    vector<pair <ll, int>> res;
+    while (n != 1) {
+        ll p = primeDiv[n];
+        res.push_back({p,0});
+        while (n % p == 0) {
+            n /= p;
+            res.back().second++;
+        }
+    }
+    return res;
+}
+
+void getList(ll lim) {
+    FOR(i,3,LIM) {
+        vector <pair <ll,int>> res;
+        res = factorize(i);
+        bool have_3 = false;
+        for (pair <ll,int> x: res) {
+            if (x.first == 3LL) {
+                have_3 = true;
+                break;
+            }
+        }
+        if (!have_3) continue;
+        int cnt = 1;
+        for (pair <ll,int> x: res) {
+            if (cnt >= 9) break;
+            cnt *= (x.second+1);
+        }
+        if (cnt == 9) a.push_back(i);
+    }
+}
+
+int getAns(ll k) {
+    int p = lower_bound(a.begin(), a.end(), k) - a.begin();
+    if (p == a.size()) return p;
+    return p;
 }
 
 signed main(void) {
@@ -59,6 +111,11 @@ signed main(void) {
     }
     
     prepare(LIM);
-
+    getList(LIM);
+    FOR(i,1,n) {
+        int ans = getAns(q[i].second) - getAns(q[i].first-1);
+        Write(ans);
+        putchar('\n');
+    }
     return 0;
 }
