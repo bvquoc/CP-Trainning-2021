@@ -86,7 +86,7 @@ void getList(ll lim) {
         if (!have_3) continue;
         int cnt = 1;
         for (pair <ll,int> x: res) {
-            if (cnt >= 9) break;
+            if (cnt > 9) break;
             cnt *= (x.second+1);
         }
         if (cnt == 9) a.push_back(i);
