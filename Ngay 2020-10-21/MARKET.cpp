@@ -32,7 +32,7 @@ inline void Write(T x) {
 int n, m, x[N], c[N];
 int G[N], f[N];
 
-int32_t main() {
+signed main() {
     FastIO;
     freopen((FILENAME+INP).c_str(),"r",stdin);
     freopen((FILENAME+OUT).c_str(),"w",stdout);
