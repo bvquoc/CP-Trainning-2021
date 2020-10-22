@@ -2,8 +2,8 @@
 #define FastIO ios::sync_with_stdio(0); cin.tie(nullptr); cout.tie(nullptr);
 #define fi first
 #define se second
-#define FOR(i, a, b) for(ll i=a; i<=b; i++)
-#define FORD(i, a, b) for(ll i=a; i>=b; i--)
+#define FOR(i, a, b) for(int i=a; i<=b; i++)
+#define FORD(i, a, b) for(int i=a; i>=b; i--)
 #define endl '\n'
 using namespace std;
 
@@ -31,24 +31,36 @@ using ld = long double;
 using ll = long long;
 
 const int N = 40;
-int n, a[N];
+int n, a[N], BIT[N];
 ll S, res = 0;
+multiset <int> S1, S2;
+
+void back_tracking(int n, multiset<int> &S, int d) {
+    FOR(state,0,((1<<n)-1)) {
+        int cur_S = 0;
+        FOR(i,0,n-1) {
+            if (state & BIT[i]) {
+                cur_S += a[i+d];
+            }
+        }
+        S.insert(cur_S);
+    }
+}
 
 signed main(void) {
     FastIO;
     freopen("TRAVEL.INP","r",stdin);
     freopen("TRAVEL.OUT","w",stdout);
     Read(n); Read(S);
-    FOR(i,0,n-1) Read(a[i]);
-    
-    FOR(state,0,((1LL<<n)-1)) {
-        ll cur_S = 0;
-        FOR(i,0,n-1) {
-            if (state & (1LL<<i)) {
-                cur_S += ll(a[i]);
-            }
-        }
-        if (cur_S == S) res++;
+    FOR(i,0,n-1) {
+        Read(a[i]);
+        BIT[i] = (1<<i);
+    }
+    back_tracking(n/2,S1,0);
+    back_tracking(n-(n/2),S2,(n/2));
+
+    for (int x: S1) {
+        res += S2.count(S-x);
     }
     Write(res);
     return 0;
