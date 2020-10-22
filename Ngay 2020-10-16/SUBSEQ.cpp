@@ -12,17 +12,18 @@ using ll = long long;
 using ld = long double;
 
 const int N = 1003;
-int n, a[N], S = 0;
-int res = -1;
+int n, S = 0, ns;
+int trace[N*N], res = -1;
+ii a[N];
 bool x[25];
 vector <int> ans;
 
 void Try(int id) {
     if (id > n) {
         int cur_S = 0;
-        FOR(i,1,n) cur_S += x[i]*(a[i]);
+        FOR(i,1,n) cur_S += x[i]*(a[i].fi);
         FOR(i,1,n) if (x[i]) {
-            if (cur_S - a[i] > (S/2)) return;
+            if (cur_S - a[i].fi > ns) return;
         }
         if (res < cur_S) {
             res = cur_S;
@@ -45,15 +46,30 @@ signed main(void) {
     freopen("SUBSEQ.OUT","w",stdout);
     cin >> n;
     FOR(i,1,n) {
-        cin >> a[i];
-        S += a[i];
+        cin >> a[i].fi;
+        S += a[i].fi;
+        a[i].se = i;
     }
+    ns = S/2;
     if (n <= 20) Try(1); // Subtask 1: back-tracking
-    else if (n <= 100) { // Subtask 2
-
-    } else { // Subtask 3 (n<=100)
-
+    else {
+        sort(a+1, a+n+1, greater<ii>());
+        trace[0] = -1;
+        FOR(i,1,n) {
+            FORD(j,S,a[i].fi) {
+                if (trace[j] == 0 && trace[j-a[i].fi] != 0) {
+                    trace[j] = i;
+                    if (j > ns && j-a[i].fi <= ns) res = max(res, j);
+                }
+            }
+        }
+        while (res) {
+            ans.push_back(a[trace[res]].se);
+            res -= a[trace[res]].fi;
+        }
+        sort(ans.begin(), ans.end());
     }
+
     cout << ans.size() << '\n';
     for (int x: ans) cout << x << ' ';
     return 0;
