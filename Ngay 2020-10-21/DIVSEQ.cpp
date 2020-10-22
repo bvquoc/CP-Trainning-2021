@@ -31,9 +31,9 @@ using ii = pair <int, int>;
 using ll = long long;
 using ld = long double;
 
-const int N = 50004;
+const int N = 50004, D = 1000006;
 int d, n, a[N];
-int psum[N];
+int cnt[D], psum[N];
 int res;
 
 signed main(void) {
@@ -48,9 +48,17 @@ signed main(void) {
             psum[i] = psum[i-1]+a[i];
         }
         res = 0;
-        FOR(l,1,n) FOR(r,l,n) {
-            if ((psum[r]-psum[l-1]) % d == 0) res++;
+        if (n <= 1000) {
+            FOR(l,1,n) FOR(r,l,n) {
+                if ((psum[r]-psum[l-1]) % d == 0) res++;
+            }
+        } else {
+            memset(cnt, 0, sizeof(cnt));
+            FOR(i,1,n) cnt[psum[i]%d]++;
+            FOR(i,0,d-1) res += (cnt[i]*(cnt[i]-1));
+            res /= 2;
         }
+        
         Write(res);
         putchar(endl);
     }
