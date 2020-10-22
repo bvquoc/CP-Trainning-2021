@@ -28,7 +28,6 @@ inline void Write(T x) {
     for (; p > 0; x %= p, p /= 10) putchar(x / p + '0');
 }
 
-
 int n, m, x[N], c[N];
 int G[N], f[N];
 
