@@ -5,20 +5,9 @@
 #define FOR(i, a, b) for(int i=a; i<=b; i++)
 #define FORD(i, a, b) for(int i=a; i>=b; i--)
 #define endl '\n'
-// #define int long long
+#define int long long
 using namespace std;
 
-template <typename T>
-inline void Read(T& x) {
-    bool Neg = false;
-    char c;
-    for (c = getchar(); c < '0' || c > '9'; c = getchar())
-        if (c == '-') Neg = !Neg;
-    x = c - '0';
-    for (c = getchar(); c >= '0' && c <= '9'; c = getchar())
-        x = x * 10 + c - '0';
-    if (Neg) x = -x;
-}
 template <typename T>
 inline void Write(T x) {
     if (x < 0) { putchar('-'); x = -x; }
@@ -40,11 +29,11 @@ signed main(void) {
     FastIO;
     freopen("DIVSEQ.INP","r",stdin);
     freopen("DIVSEQ.OUT","w",stdout);
-    int T; Read(T);
+    int T; cin >> T;
     while (T--) {
-        Read(d); Read(n);
+        cin >> d >> n;
         FOR(i,1,n) {
-            Read(a[i]);
+            cin >> a[i];
             psum[i] = psum[i-1]+a[i];
         }
         res = 0;
@@ -53,8 +42,11 @@ signed main(void) {
                 if ((psum[r]-psum[l-1]) % d == 0) res++;
             }
         } else {
-            memset(cnt, 0, sizeof(cnt));
-            FOR(i,1,n) cnt[psum[i]%d]++;
+            FOR(i,0,d-1) cnt[i] = 0; cnt[0] = 1;
+            FOR(i,1,n) {
+                int x = psum[i]%d; 
+                cnt[x]++;
+            }
             FOR(i,0,d-1) res += (cnt[i]*(cnt[i]-1));
             res /= 2;
         }
