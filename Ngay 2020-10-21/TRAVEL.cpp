@@ -30,20 +30,24 @@ using ii = pair <int, int>;
 using ld = long double;
 using ll = long long;
 
-const int N = 40;
-int n, a[N], BIT[N];
+const int N = 41;
+int n, a[N];
 ll S, res = 0;
-multiset <int> S1, S2;
+map <int,int> cnt;
+bool x[22];
+int cur_S = 0;
 
-void back_tracking(int n, multiset<int> &S, int d) {
-    FOR(state,0,((1<<n)-1)) {
-        int cur_S = 0;
-        FOR(i,0,n-1) {
-            if (state & BIT[i]) {
-                cur_S += a[i+d];
-            }
-        }
-        S.insert(cur_S);
+void Try(int i, int n, int d) {
+    if (i == n) {
+        if (d != 0) cnt[cur_S]++;
+        else res += cnt[S-cur_S];
+        return;
+    }
+    FOR(j,0,1) {
+        x[i] = j;
+        cur_S += x[i]*a[i+d];
+        if (i<n) Try(i+1,n,d);
+        cur_S -= x[i]*a[i+d];
     }
 }
 
@@ -52,16 +56,9 @@ signed main(void) {
     freopen("TRAVEL.INP","r",stdin);
     freopen("TRAVEL.OUT","w",stdout);
     Read(n); Read(S);
-    FOR(i,0,n-1) {
-        Read(a[i]);
-        BIT[i] = (1<<i);
-    }
-    back_tracking(n/2,S1,0);
-    back_tracking(n-(n/2),S2,(n/2));
-
-    for (int x: S1) {
-        res += S2.count(S-x);
-    }
+    FOR(i,0,n-1) Read(a[i]);
+    Try(0,n-(n/2),(n/2));
+    Try(0,n/2,0);
     Write(res);
     return 0;
 }
