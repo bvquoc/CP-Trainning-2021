@@ -5,7 +5,6 @@
 #define FOR(i, a, b) for(int i=a; i<=b; i++)
 #define FORD(i, a, b) for(int i=a; i>=b; i--)
 #define endl '\n'
-// #define int long long
 using namespace std;
 
 using ii = pair <int, int>;
