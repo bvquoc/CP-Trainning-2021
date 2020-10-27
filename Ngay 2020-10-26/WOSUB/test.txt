@@ -1,0 +1,3 @@
+Comparing files WOSUB.OUT and WOSUB.ANS
+FC: no differences encountered
+
