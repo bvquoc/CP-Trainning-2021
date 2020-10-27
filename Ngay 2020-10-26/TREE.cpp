@@ -12,12 +12,14 @@ using ii = pair <int, int>;
 using ll = long long;
 using ld = long double;
 
+#define MAX_W 5011
+const int N = 5003;
 int n;
-int a[5011], nChild[5011];
-int f[5011][5011]; // f[u][k] la so thao tac it nhat khi xet rieng cay con nut u va bien a[u] = k
-int g[5001][5011]; // g[sub][k] la so thao tac it nhat khi xet qua sub nhanh cua cay con nut u (dang xet) va tong cua cac nut = k
+int a[N], nChild[MAX_W];
+int f[N][MAX_W]; // f[u][k] la so thao tac it nhat khi xet rieng cay con nut u va bien a[u] = k
+int g[N][MAX_W]; // g[sub][k] la so thao tac it nhat khi xet qua sub nhanh cua cay con nut u (dang xet) va tong cua cac nut = k
 
-vector<int> adj[5011];
+vector<int> adj[MAX_W];
 
 void dfs(int u, int p) {
 	nChild[u] = 1;
@@ -33,11 +35,11 @@ void dfs(int u, int p) {
 			nChild[u] += nChild[v];
 		}
 	
-    FOR(i,0,5010) f[u][i] = 1e9;
+    FOR(i,0,MAX_W-1) f[u][i] = 1e9;
 
 	int id = 0;
     FOR(i,0,adj[u].size()-1)
-        FOR(j,0,5010) g[i][j] = 1e9;
+        FOR(j,0,MAX_W-1) g[i][j] = 1e9;
 					
 	g[0][0] = 0;
 
@@ -50,7 +52,7 @@ void dfs(int u, int p) {
 					g[id][i + add] = min(g[id][i + add], g[id - 1][i] + f[v][add]);	
 			best += nChild[v];
 		}			
-	FOR(i,0,5010)
+	FOR(i,0,MAX_W-1)
 		f[u][i] = g[id][i] + abs(a[u] - i);       
 }
 
@@ -71,7 +73,7 @@ signed main() {
 	
     dfs(1, -1);
 	int ans = 1e9;
-	FOR(i,0,5010)
+	FOR(i,0,MAX_W-1)
 		ans = min(ans, f[1][i]);
     
 	cout << ans;
