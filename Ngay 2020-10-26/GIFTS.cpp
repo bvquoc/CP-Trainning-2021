@@ -29,7 +29,7 @@ signed main(void) {
     FORD(i,n-k+1,1) R[i] = max(R[i+1], SUM(i,i+k-1));
     FOR(i,k+1,n-k+1) L[i] = max(L[i-1], SUM(i-k,i-1));
     
-    FOR(i,k+1,n-k+1) {
+    FOR(i,1,n-k+1) {
         int l = L[i], r = R[i+k], cur = SUM(i,i+k-1);
         if (cur >= max(l,r)) res = min(res, max(l,r));
     }
