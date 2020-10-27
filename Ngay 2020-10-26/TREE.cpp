@@ -12,48 +12,32 @@ using ii = pair <int, int>;
 using ll = long long;
 using ld = long double;
 
-#define MAX_W 5011
 const int N = 5003;
-int n;
-int a[N], nChild[MAX_W];
-int f[N][MAX_W]; // f[u][k] la so thao tac it nhat khi xet rieng cay con nut u va bien a[u] = k
-int g[N][MAX_W]; // g[sub][k] la so thao tac it nhat khi xet qua sub nhanh cua cay con nut u (dang xet) va tong cua cac nut = k
-
-vector<int> adj[MAX_W];
+int n, a[N];
+vector <int> adj[N], child[N];
+int f[N][N];
 
 void dfs(int u, int p) {
-	nChild[u] = 1;
-	if (adj[u].size() == 1 && u != 1) {
-		f[u][0] = abs(a[u]);
-		f[u][1] = abs(a[u] - 1);
-		return;
+	for (int v: adj[u]) if (v != p) {
+		child[u].push_back(v);
+		dfs(v,u);
 	}
+}
 
-	for (int v : adj[u])
-		if (v != p) {
-			dfs(v, u);    	
-			nChild[u] += nChild[v];
-		}
+#define isLeaf(x) (child[x].empty())
+int dp(int u, int sum) {
+	if (f[u][sum] != -1) return f[u][sum];
+	int cur_cost = abs(a[u]-sum);
+	if (isLeaf(u)) {
+		if (sum > 1 || sum < 0) return INT_MAX;
+		return cur_cost;
+	}
+	if (child[u].size() == 1) return f[u][sum] = cur_cost + dp(child[u][0],sum);
 	
-    FOR(i,0,MAX_W-1) f[u][i] = 1e9;
-
-	int id = 0;
-    FOR(i,0,adj[u].size()-1)
-        FOR(j,0,MAX_W-1) g[i][j] = 1e9;
-					
-	g[0][0] = 0;
-
-	int best = 0;
-	for (int v : adj[u])
-		if (v != p) {
-			id++;
-            FOR(i,0,best)
-				for (int add = 0; add <= nChild[v]; add++)
-					g[id][i + add] = min(g[id][i + add], g[id - 1][i] + f[v][add]);	
-			best += nChild[v];
-		}			
-	FOR(i,0,MAX_W-1)
-		f[u][i] = g[id][i] + abs(a[u] - i);       
+	int cur = LLONG_MAX;
+	int v1 = child[u][0], v2 = child[u][1];
+	FOR(s, 0, sum) cur = min(cur, cur_cost+dp(v1,s)+dp(v2,sum-s));
+	return f[u][sum] = cur;
 }
 
 signed main() {
@@ -63,19 +47,15 @@ signed main() {
 	cin >> n; 
     FOR(i,1,n) cin >> a[i];
     FOR(i,1,n-1) {
-		int u, v;
-		cin >> u >> v;
+		int u, v; cin >> u >> v;
 		adj[u].push_back(v);
 		adj[v].push_back(u);
 	}
 
-	if (n == 1) return cout << min(abs(a[1]), abs(a[1] - 1)), 0;
-	
-    dfs(1, -1);
-	int ans = 1e9;
-	FOR(i,0,MAX_W-1)
-		ans = min(ans, f[1][i]);
-    
+	dfs(1,-1);
+	memset(f, -1, sizeof(f));
+    int ans = LLONG_MAX;
+	FOR(i,0,n) ans = min(ans,dp(1,i));
 	cout << ans;
     return 0;
 }
