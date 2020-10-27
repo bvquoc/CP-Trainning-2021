@@ -11,7 +11,6 @@ using namespace std;
 using ii = pair <int, int>;
 using ll = long long;
 using ld = long double;
-#include <bits/stdc++.h>
 
 int n;
 int a[5011], nChild[5011];
