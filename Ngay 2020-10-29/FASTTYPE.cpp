@@ -1,36 +1,43 @@
 #include <bits/stdc++.h>
 #define FastIO ios::sync_with_stdio(0); cin.tie(nullptr); cout.tie(nullptr);
-#define fi first
-#define se second
 #define FOR(i, a, b) for(int i=a; i<=b; i++)
 #define FORD(i, a, b) for(int i=a; i>=b; i--)
-#define BIT(x, i) (((x) >> (i)) & 1)
-#define MASK(i) (1LL << (i))
-#define endl '\n'
-// #define int long long
 using namespace std;
 
-using ii = pair <int, int>;
-using ll = long long;
-using ld = long double;
+template <typename T>
+inline void Read(T& x) {
+    bool Neg = false;
+    char c;
+    for (c = getchar(); c < '0' || c > '9'; c = getchar())
+        if (c == '-') Neg = !Neg;
+    x = c - '0';
+    for (c = getchar(); c >= '0' && c <= '9'; c = getchar())
+        x = x * 10 + c - '0';
+    if (Neg) x = -x;
+}
 
-int k, m, q;
+#define MAX_Q 200005
+int k, m, q_sz;
+int a[MAX_Q], b[MAX_Q], c[MAX_Q];
 string s;
 
+int getIndex(int k) {
+    FORD(i,q_sz,1) {
+        if (k < c[i]) continue;
+        if (k >= c[i] + (b[i] - a[i])) k -= b[i] - a[i];
+        else k -= c[i] - a[i];
+    }
+    return k;
+}
+
 signed main(void) {
-    FastIO;
     freopen("FASTTYPE.INP","r",stdin);
     freopen("FASTTYPE.OUT","w",stdout);
-    cin >> k >> m;
-    cin >> s;
-    cin >> q;
-    while (q--) {
-        int a, b, c;
-        cin >> a >> b >> c;
-        string tmp = s.substr(a,b-a);
-        s.insert(c,tmp);
-        while (s.size() > m) s.pop_back();
-    }
-    FOR(i,0,k-1) cout << s[i];
+    Read(k); Read(m);
+    getline(cin,s);
+    Read(q_sz);
+    FOR(i,1,q_sz) Read(a[i]), Read(b[i]), Read(c[i]);
+
+    FOR(i,0,k-1) putchar(s[getIndex(i)]);
     return 0;
 }
