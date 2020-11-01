@@ -41,7 +41,7 @@ signed main(void) {
         } else l = mi + 1;
     }
     
-    FOR(i, LEFT_LIM, LEFT_LIM+6e7) {
+    FOR(i, LEFT_LIM, LEFT_LIM+2e7) {
         int cur = sqr(i)+k;
         if (isSquare(cur)) {
             cout << sqrt(cur);
