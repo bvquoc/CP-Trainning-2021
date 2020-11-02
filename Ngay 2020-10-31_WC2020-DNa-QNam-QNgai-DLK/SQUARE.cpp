@@ -32,23 +32,19 @@ signed main(void) {
     freopen("SQUARE.INP","r",stdin);
     freopen("SQUARE.OUT","w",stdout);
     int k; cin >> k;
-    int LEFT_LIM = LLONG_MAX, l = 0, r = 1e9;
-    while (l <= r) {
-        int mi = (l+r) / 2;
-        if (sqr(mi)+k >= 0) {
-            LEFT_LIM = mi;
-            r = mi - 1;
-        } else l = mi + 1;
+    if (k == 0) {
+        cout << "0";
+        return 0;
     }
-    
-    FOR(i, LEFT_LIM, LEFT_LIM+2e7) {
-        int cur = sqr(i)+k;
-        if (isSquare(cur)) {
-            cout << sqrt(cur);
-            exit(0);
-        }
+    int absK = (k > 0 ? k : -k), ans = LLONG_MAX;
+    for (int a = 1; a*a <= absK; a++) {
+        if (absK % a != 0) continue;
+        int b = k / a;
+        if ((a+b) % 2 == 0) ans = min(ans, abs((a+b) / 2));
     }
-    cout << "none";
+
+    if (ans == LLONG_MAX) cout << "none";
+    else cout << ans;
     
     // duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     // std::cout<<"\nTotal time: "<< duration <<'\n';
