@@ -29,7 +29,8 @@ signed main(void) {
     int i = 1, j = 1, cur_t = 0;
     bool isA = 1;
 
-    while (cur_t <= t) {
+    a[0] = b[0] = INT_MIN;
+    while (true) {
         if (isA) {
             while (i <= n && a[i] <= cur_t) i++;
 
