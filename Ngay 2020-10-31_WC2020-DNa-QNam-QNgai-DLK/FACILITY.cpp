@@ -53,7 +53,7 @@ using ii = pair <int, int>;
 using ll = long long;
 using ld = long double;
 
-const int N = 1000006;
+const int N = 2000006;
 int n, K, res = 0; 
 struct data { 
     int s, d, r; 
