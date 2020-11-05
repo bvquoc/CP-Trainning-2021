@@ -70,7 +70,7 @@ signed main() {
     b.resize(n);
     for (int &x: b) cin >> x;
     compress(b);
-    a[1] = 1;
+    a[1] = b[0];
     FOR(i,1,n-1) {
         if (b[i] < b[i-1]) a[i+1] = a[i];
         else a[i+1] = a[i] + 1;
