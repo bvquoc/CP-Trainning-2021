@@ -35,8 +35,7 @@ using ll = long long;
 using ld = long double;
 
 const int oo = 1e9;
-const int minN = 105;
-const int maxN = 1e4 + 500;
+const int maxN = 10004;
 
 int n, k, Q, P, a[maxN];
 
@@ -61,9 +60,9 @@ signed main(void) {
     freopen("FARM.INP","r",stdin);
     freopen("FARM.OUT","w",stdout);
     cin >> n >> k >> Q >> P;
-	for (int i = 1; i <= n; i++) cin >> a[i];
+	FOR(i,1,n) cin >> a[i];
     cache = new int*[n + 1];
-    for (int i = 0; i <= n; i++) {
+    FOR(i,0,n) {
         cache[i] = new int[Q + 1];
         for (int q = 0; q <= Q; q++) cache[i][q] = -1;	
     }
