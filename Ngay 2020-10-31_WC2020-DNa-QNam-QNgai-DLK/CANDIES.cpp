@@ -12,89 +12,66 @@
 #define int long long
 using namespace std;
 
-template <typename T>
-inline void Read(T& x) {
-    bool Neg = false;
-    char c;
-    for (c = getchar(); c < '0' || c > '9'; c = getchar())
-        if (c == '-') Neg = !Neg;
-    x = c - '0';
-    for (c = getchar(); c >= '0' && c <= '9'; c = getchar())
-        x = x * 10 + c - '0';
-    if (Neg) x = -x;
-}
-template <typename T>
-inline void Write(T x) {
-    if (x < 0) { putchar('-'); x = -x; }
-    T p = 1;
-    for (T temp = x / 10; temp > 0; temp /= 10) p *= 10;
-    for (; p > 0; x %= p, p /= 10) putchar(x / p + '0');
-}
-
 template<class T> T Abs(const T &x) { return (x < 0 ? -x : x); }
 template<class X, class Y>
 bool minimize(X &x, const Y &y) {
-    X eps = 1e-9;
-    if (x > y + eps) {
-        x = y;
-        return true;
-    } else return false;
+	X eps = 1e-9;
+	if (x > y + eps) {
+		x = y;
+		return true;
+	} else return false;
 }
 template<class X, class Y>
 bool maximize(X &x, const Y &y) {
-    X eps = 1e-9;
-    if (x + eps < y) {
-        x = y;
-        return true;
-    } else return false;
+	X eps = 1e-9;
+	if (x + eps < y) {
+		x = y;
+		return true;
+	} else return false;
 }
 
-using ii = pair <int, int>;
-using ll = long long;
-using ld = long double;
+const int minN = 1e5 + 500;
+const int INF = 1e15;
 
-const int NTEST = 100005;
-ii q[NTEST];
-int LIM = -1;
-#define nextFib (fibo.back() + fibo[fibo.size()-2])
-vector <int> fibo;
+const int maxK = 100;
+int numK = 0, fibo[maxK];
 
-int calc(int x) {
-    if (x < 0) return 0;
-    int p = -1;
-    int l = 0, r = fibo.size() - 1, mid;
-    while (l <= r) {
-        mid = (l+r) / 2;
-        if (fibo[mid] == x) return 1;
-        if (fibo[mid] > x) r = mid - 1;
-        else {
-            maximize(p, mid);
-            l = mid + 1;
-        }
-    }
-    return 1 + calc(x - fibo[p]);
+void generate_fibo() {
+	fibo[1] = fibo[2] = 1;
+	for (int k = 3; k < maxK; k++) {
+		fibo[k] = fibo[k - 1] + fibo[k - 2];
+		if (fibo[k] > INF) break;
+		numK = k;
+	}	
 }
 
-signed main(void) {
-    FastIO;
-    freopen("CANDIES.INP","r",stdin);
-    freopen("CANDIES.OUT","w",stdout);
-    int T; Read(T);
-    REP(i,T) {
-        Read(q[i].first); Read(q[i].second);
-        maximize(LIM, q[i].first);
-    }
-    fibo.push_back(1);
-    fibo.push_back(2);
-    while (nextFib <= LIM) fibo.push_back(nextFib);
-    
-    REP(i,T) {
-        int ans = 0, cur;
-        FOR(j,1,q[i].first) {
-            cur = calc(j);
-            if (cur >= q[i].second) ans += cur;
-        }
-        Write(ans); putchar(endl);
-    }
-    return 0;
+int cnt[minN], sum[minN][maxK];
+void prepare() {
+	cnt[0] = 0;
+	int cur = 0;
+	for (int i = 1; i < minN; i++) {
+		cnt[i] = i;
+		for (int k = 1; k <= numK and fibo[k] <= i; k++)
+			minimize(cnt[i], cnt[i - fibo[k]] + 1);
+		maximize(cur, cnt[i]);
+		sum[i][cnt[i]] += cnt[i];
+	}
+	for (int i = 1; i < minN; i++)
+		for (int k = 0; k <= cur; k++) sum[i][k] += sum[i - 1][k];
+}
+
+signed main() {
+	freopen("CANDIES.INP","r",stdin);
+	freopen("CANDIES.OUT","w",stdout);
+	generate_fibo();
+	prepare();
+	int nTests; cin >> nTests;
+	for (int n, k; nTests --> 0; ) {
+		cin >> n >> k;
+		if (max(n, k) < minN) {
+			int answer = 0;
+			for (int _k = k; _k < maxK; _k++) answer += sum[n][_k];
+			cout << answer << endl;
+		}
+	}
 }
