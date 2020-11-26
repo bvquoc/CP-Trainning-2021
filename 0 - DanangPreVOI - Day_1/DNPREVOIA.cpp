@@ -95,7 +95,7 @@ signed main(void) {
         FOR(i,2,60) {
             int l = 2, r = R[i], mi;
             while (l <= r) {
-                int mi = (l + r) / 2;
+                mi = (l + r) / 2;
                 int cur = pw(mi,i);
                 if (cur == n) {
                     if (!(i & 1)) ans.push_back({-mi, i});
