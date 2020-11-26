@@ -13,6 +13,7 @@
 #define testBit(n, bit) (((n) >> (bit)) & 1LL)
 #define flipBit(n, bit) ((n) ^ (1LL << (bit)))
 #define cntBit(n) __builtin_popcountll(n)
+#define SPACE putchar(' ');
 #define sqr(x) ((x)*(x))
 #define endl '\n'
 #define int long long
@@ -70,34 +71,101 @@ const int dy[] = { 0, 1, 0,-1};
 / >?? */
 
 const int Q_MAX = 300005;
-struct query {
+struct data {
     bool add;
     int t, c;
-    query() { 
+    data() { 
         add = false; 
         t = c = 0;
     }
-    query(int _t, int _c) {
+    data(int _t, int _c) {
         add = true;
         t = _t;
         c = _c;
     }
 };
 
+const int INF = 1e9 + 7;
 int q_sz, k;
-vector <query> q;
-bool mark[Q_MAX];
+vector <data> q;
+int pos[10000007];
 int val[Q_MAX];
+struct Node {
+    ll sumDeli; int cntDish, maxCalo;
+    Node() { 
+        sumDeli = cntDish = 0; 
+        maxCalo = 0;
+    }
+    Node(int _s, int _v, int _d) {
+        sumDeli = _s;
+        maxCalo = _v;
+        cntDish = _d;
+    }
+};
+struct SegmentTree {
+    int n; vector <Node> st;
+    void assign(signed sz) {
+        n = sz; 
+        st.clear();
+        st.resize(4 * n + 7);
+    }
 
-// #define FILE_IO
+    SegmentTree() { n = 0; st.clear(); }
+    SegmentTree(signed sz) { assign(sz); }
+
+    void merge(int id, int id1, int id2) {
+        st[id].maxCalo = max(st[id1].maxCalo, st[id2].maxCalo);
+        st[id].cntDish = st[id1].cntDish + st[id2].cntDish;
+        st[id].sumDeli = st[id1].sumDeli + st[id2].sumDeli;
+    }
+    void update(int id, int l, int r, int i, int T, int C) {
+        if (i < l || r < i) return;
+        if (l == r) {
+            st[id].maxCalo = C;
+            st[id].sumDeli = T;
+            st[id].cntDish = (C != 0);
+            return;
+        }
+        
+        int mid = (l+r) >> 1, id1 = (id << 1), id2 = id1 + 1;
+        update(id1, l, mid, i, T, C);
+        update(id2, mid + 1, r, i, T, C);
+        merge(id, id1, id2);
+	}
+
+    int res, K;
+
+    void query(int id, int l, int r, int LIM) {
+        if (K == 0) return;
+        if (st[id].maxCalo < LIM && st[id].cntDish <= K) {
+            res += st[id].sumDeli;
+            K -= st[id].cntDish;
+            return;
+        }
+
+        int mid = (l+r) >> 1, id1 = (id << 1), id2 = id1 + 1;
+        query(id2, mid + 1, r, LIM);
+        query(id1, l, mid, LIM);
+    }
+
+    int getAns(int LIM) {
+        res = 0; K = k;
+        query(1, 1, n, LIM);
+        return res;
+    }
+
+} ST;
+
+void Brute_force();
+
+#define FILE_IO
 signed main(void) {
     #ifdef FILE_IO
     freopen("B.INP","r",stdin);
     freopen("B.OUT","w",stdout);
     #endif
-    
 
-    auto compress = [&](vector<query> &A) {
+    auto compress = [&](vector<data> &A) {
         vector <int> a;
         FORE(it, A) a.push_back(it -> c);
 
@@ -112,7 +180,7 @@ signed main(void) {
     };
 
     int T;
-    { /* Read & compress inp */
+    /* Read & compress inp */ { 
         Read(T);
         Read(q_sz); Read(k);    
         string type;
@@ -121,66 +189,67 @@ signed main(void) {
             cin >> type;
             if (type == "show") {
                 Read(t); Read(c);
-                q.push_back(query(t,c));
-            } else q.push_back(query());
+                q.push_back(data(t,c));
+            } else q.push_back(data());
         }
         compress(q);
     }
 
-    #define SPACE putchar(' ');
+    if (T <= 2) Brute_force();
 
-    // if (T == 1) { // subtask 1
-        REP(i,q_sz) mark[i] = !q[i].add;
 
-        int res;
+    int n = 0;
+    /* compress q[i].t pos */ {
         vector <int> a;
-        REP(i,q_sz) {
-            if (!q[i].add) {
-                int mx_id = -1;
-                FOR(j,0,i) if (!mark[j]) {
-                    if (mx_id == -1 || q[mx_id].c < q[j].c) {
-                        mx_id = j;
-                    }
-                }
-                if (mx_id > -1) mark[mx_id] = true;
-            }
-            a.clear();
-            FOR(j,0,i) if (!mark[j]) a.emplace_back(q[j].t);
+        REP(i,q_sz) if (q[i].add) a.push_back(q[i].t);
+        sort(ALL(a));
+        n = a.size();
+        int p = 1;
+        REP(i,n) pos[a[i]] = p++;
+    }
 
-            sort(ALL(a), greater<int>());
-            int sz = min((ll) a.size(),k); res = 0;
-            REP(j,sz) res += a[j];
-            Write(res); SPACE;
-            // for (int x: a) cout << x << ' '; cout << endl;
+    ST.assign(n);
+    priority_queue <int> heap;
+
+    REP(i,q_sz) {
+        int mx = INF;
+        if (q[i].add) {
+            ST.update(1, 1, n, pos[q[i].t], q[i].t, q[i].c);
+            heap.push(q[i].c);
+            val[q[i].c] = q[i].t;
+        } else {
+            mx = heap.top(); heap.pop();
+            signed p = pos[val[mx]];
+            ST.update(1, 1, n, p, 0, 0);
         }
-        exit(0);
-    // }
-    // if (T == 3) { // subtask 3
-    //     REP(i,q_sz) val[q[i].c] = q[i].t;
-
-    //     priority_queue <int> heap;
-    //     int res = 0, cnt = 0;
-    //     REP(i,q_sz) {
-    //         // if (q[i].add) {
-    //         //     heap.push(q[i].c);
-    //         //     mp[q[i].c] = q[i].t;
-    //         //     if (cnt < k) {
-    //         //         res += q[i].t;
-    //         //         mark[q[i].c] = true;
-    //         //         val.push(q[i].t);
-    //         //         cnt++;
-    //         //     }
-    //         // } else {
-    //         //     int cur = heap.top(); heap.pop();
-    //         //     if (mark[cur]) {
-    //         //         res -= mp[cur];
-    //         //         mp[cur] = 0;
-    //         //     }
-    //         // }
-            
-    //         Write(res); SPACE;  
-    //     }
-    // }
-    // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
+        Write(ST.getAns(mx)); SPACE;
+    }
     return 0;
+}
+
+void Brute_force() {
+    bool mark[q_sz + 2];
+    REP(i,q_sz) mark[i] = !q[i].add;
+
+    int res;
+    vector <int> a;
+    REP(i,q_sz) {
+        if (!q[i].add) {
+            int mx_id = -1;
+            FOR(j,0,i) if (!mark[j]) {
+                if (mx_id == -1 || q[mx_id].c < q[j].c) {
+                    mx_id = j;
+                }
+            }
+            if (mx_id > -1) mark[mx_id] = true;
+        }
+        a.clear();
+        FOR(j,0,i) if (!mark[j]) a.emplace_back(q[j].t);
+
+        sort(ALL(a), greater<int>());
+        int sz = min((ll) a.size(),k); res = 0;
+        REP(j,sz) res += a[j];
+        Write(res); SPACE;
+    }
+    exit(0);
 }
