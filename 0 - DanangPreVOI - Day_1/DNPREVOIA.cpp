@@ -79,7 +79,7 @@ int pw(int x, unsigned int y) {
     return x * cur * cur; 
 }
 
-// #define FILE_IO
+#define FILE_IO
 signed main(void) {
     FastIO;
     #ifdef FILE_IO
@@ -98,6 +98,7 @@ signed main(void) {
                 int mi = (l + r) / 2;
                 int cur = pw(mi,i);
                 if (cur == n) {
+                    if (!(i & 1)) ans.push_back({-mi, i});
                     ans.push_back({mi, i});
                     break;
                 }
