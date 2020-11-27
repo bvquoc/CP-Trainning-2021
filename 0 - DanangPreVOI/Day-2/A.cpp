@@ -74,7 +74,7 @@ const int N = 400005;
 int n, a[N];
 set <int> S;
 
-#define FILE_IO
+// #define FILE_IO
 signed main(void) {
     FastIO;
     #ifdef FILE_IO
