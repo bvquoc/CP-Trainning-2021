@@ -23,14 +23,14 @@ signed main(void) {
     freopen("A.OUT","w",stdout);
     #endif
     cin >> n >> n;
-    a.resize(n+1); b.resize(n+1);
+    a.assign(n+1, 0); b.assign(n+1, 0);
     int i;
     for (i = 1; i <= n; i++) cin >> a[i];
 
     for (i = 1; i <= n; i++) if (a[i] != -1) b[a[i]] = 1;
 
-    int sz = 0;
     for (i = 1; i <= n; i++) if (!b[i]) c.push_back(i);
+    
     int j = 0;
     for (i = 1; i <= n; i++) if (a[i] == -1) a[i] = c[j++];
 
