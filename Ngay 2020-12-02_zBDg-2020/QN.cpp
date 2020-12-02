@@ -66,8 +66,10 @@ signed main(void) {
 
     S.push_back(0);
     S.push_back(1);
+    S.push_back(3);
+    S.push_back(2);
 
-    FOR(i, 2, n) {
+    FOR(i, 3, n) {
         for (int x: S) {
             int c = MASK(i-1) ^ x;
             tmp.push(c);
