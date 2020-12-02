@@ -3,13 +3,13 @@
 FOR(t,2,n) {
     li = -1, ok = true;
     FOR(j,1,n) {
-	if (L[i]+w[j][t] == L[t]) {
-	    if (li != -1) {
-		ok = false;
-		break;
-	    }
-	    li = i;
-	}
+		if (L[i]+w[j][t] == L[t]) {
+			if (li != -1) {
+			ok = false;
+			break;
+			}
+			li = i;
+		}
     }
 	if (ok) dijkstra(xoas canh j-t)
     
