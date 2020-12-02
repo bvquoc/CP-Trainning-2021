@@ -73,10 +73,10 @@ void back_tracking(int i) {
         minimize(result, cur);
         return;
     }
-    
+
     FOR(id,1,4) {
         if(mark[id]) continue;
-        mark[id] = 1;
+        mark[id] = true;
         vector <int> X_tmp = X, Y_tmp = Y;
         for(int x: X_tmp) {
             for(int y: Y_tmp) {
