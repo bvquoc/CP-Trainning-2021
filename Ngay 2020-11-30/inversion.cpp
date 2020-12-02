@@ -36,7 +36,6 @@ inline void Write(T x) {
     for (; p > 0; x %= p, p /= 10) putchar(x / p + '0');
 }
 
-
 template<class T> T Abs(const T &x) { return (x < 0 ? -x : x); }
 template<class X, class Y>
 bool minimize(X &x, const Y &y) {
