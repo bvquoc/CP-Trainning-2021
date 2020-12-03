@@ -73,7 +73,7 @@ const int dy[] = { 0, 1, 0,-1};
 const int N = 4003, MOD = 1000000007;
 int n, m, res[N];
 bool mark[N];
-set <int> adj[N];
+vector <int> adj[N];
 
 void dfs(int u, int d) {
     mark[u] = true;
@@ -98,8 +98,8 @@ signed main(void) {
     Read(n); Read(m);
     FOR(i,1,m) {
         int u, v; Read(u); Read(v);
-        adj[u].insert(v);
-        adj[v].insert(u);
+        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
 
     auto prepare = [&]() {
