@@ -50,9 +50,6 @@ using ii = pair <int, int>;
 using ll = long long;
 using ld = long double;
 
-const int dx[] = {-1, 0, 1, 0};
-const int dy[] = { 0, 1, 0,-1};
-
 /*
 (\_/)
 ( •_•)
@@ -75,11 +72,11 @@ struct Point {
 } a[N];
 istream& operator >> (istream &is, Point &p) { return is >> p.x >> p.y; }
 
-bool check1(const Point &A, const Point &B) {
+bool checkVertical(const Point &A, const Point &B) {
     if ((ll) A.x * B.x > 0) return false;
     return true;
 }
-bool check2(const Point &A, const Point &B) {
+bool checkHorizontal(const Point &A, const Point &B) {
     if ((ll) A.y * B.y > 0) return false;
     return true;
 }
@@ -120,8 +117,8 @@ signed main(void) {
 
         FOR(i,1,n) {
             B = A.move(a[i]);
-            if (check1(A, B)) res++;
-            if (check2(A, B)) res++;
+            if (checkVertical(A, B)) res++;
+            if (checkHorizontal(A, B)) res++;
             // cout << A.x << ' ' << A.y << endl;
             // cout << B.x << ' ' << B.y << endl;
             // cout << res << endl;
@@ -135,10 +132,3 @@ signed main(void) {
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
-
-
-// const Point NA = Point(INF, INF);
-// const Point LEFT = Point(-INF, 0);
-// const Point RIGHT = Point(INF, 0);
-// const Point UP = Point(0, INF);
-// const Point DOWN = Point(0, -INF);
