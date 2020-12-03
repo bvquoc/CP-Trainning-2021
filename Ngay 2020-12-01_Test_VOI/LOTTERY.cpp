@@ -72,7 +72,6 @@ const int dy[] = { 0, 1, 0,-1};
 
 const int N = 4003, MOD = 1000000007;
 int n, m, res[N];
-bool a[20][20];
 bool mark[N];
 set <int> adj[N];
 
@@ -99,33 +98,8 @@ signed main(void) {
     Read(n); Read(m);
     FOR(i,1,m) {
         int u, v; Read(u); Read(v);
-        if (n <= 10) {
-            a[u][v] = true;
-            a[v][u] = true;
-        }
         adj[u].insert(v);
         adj[v].insert(u);
-    }
-
-    if (n <= 10) { /* subtask 1 */
-        int b[20];
-        iota(b + 1, b + 1 + n, 1);
-        do {
-            FOR(i,2,n) {
-                if (a[b[i-1]][b[i]]) {
-                    res[i]++;
-                    if (res[i] > MOD) res[i] -= MOD;
-                } else break;
-            }
-        } while (next_permutation(b + 1, b + 1 + n));
-
-        res[1] = n;
-        #define SPACE putchar(' ')
-        FOR(i,1,n) {
-            Write(res[i]);
-            SPACE;
-        }
-        exit(0);
     }
 
     auto prepare = [&]() {
