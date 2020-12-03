@@ -67,24 +67,25 @@ void DFS(int u, int par)  {
 
 int f[N][N];
 int dp(int u, int s) {
-    if (f[u][s] != INF) return f[u][s];
+    int &ans = f[u][s];
+    if (ans != INF) return ans;
     if (child[u].size() == 0) {
         if (s >= 2 || s < 0) return INF;
-        return f[u][s] = abs(a[u] - s);
+        return ans = Abs(a[u] - s);
     }
     if (child[u].size() == 1) {
-        int cur = dp(child[u][0], s) + abs(a[u] - s);
-        return f[u][s] = cur;
+        int cur = dp(child[u][0], s) + Abs(a[u] - s);
+        return ans = cur;
     }
     if (child[u].size() == 2) {
         int v1 = child[u][0], v2 = child[u][1];
         FOR(t1,0,s) {
             int t2 = s-t1;
             if (t1 <= child_cnt[v1] && t2 <= child_cnt[v2])
-                f[u][s] = min(f[u][s], abs(a[u] - s) + dp(v1, t1) + dp(v2, t2));
+                minimize(ans, Abs(a[u] - s) + dp(v1, t1) + dp(v2, t2));
         }
     }
-    return f[u][s];
+    return ans;
 }
 
 #define FILE_IO
