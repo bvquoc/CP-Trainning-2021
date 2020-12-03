@@ -1,11 +1,11 @@
-/* 𝙰𝚞𝚝𝚑𝚘𝚛: 𝙱𝚞𝚒 𝚅𝚒 𝚀𝚞𝚘𝚌 */
+/* Author: Bui Vi Quoc */
 #include <bits/stdc++.h>
 #define FastIO ios::sync_with_stdio(0); cin.tie(nullptr); cout.tie(nullptr);
 #define fi first
 #define se second
-#define FOR(i, a, b) for(int i=(a); i<=(b); i++)
-#define FORD(i, a, b) for(int i=(a); i>=(b); i--)
-#define REP(i, n) for(int i=0, _n=(n); i<_n; i++)
+#define FOR(i, a, b) for(int i=(a); i<=(b); ++i)
+#define FORD(i, a, b) for(int i=(a); i>=(b); --i)
+#define REP(i, n) for(int i=0, _n=(n); i<_n; ++i)
 #define FORE(i, v) for (__typeof((v).begin()) i = (v).begin(); i != (v).end(); ++i)
 #define ALL(v) (v).begin(), (v).end()
 #define BIT(x, i) (((x) >> (i)) & 1)
@@ -26,7 +26,7 @@ inline void Read(T& x) {
         if (c == '-') Neg = !Neg;
     x = c - '0';
     for (c = getchar(); c >= '0' && c <= '9'; c = getchar())
-        x = x * 10 + c - '0';
+        x = (x << 3) + (x << 1) + c - '0';
     if (Neg) x = -x;
 }
 template <typename T>
@@ -61,16 +61,14 @@ using ii = pair <int, int>;
 using ll = long long;
 using ld = long double;
 
-const int dx[] = {-1, 0, 1, 0};
-const int dy[] = { 0, 1, 0,-1};
-
 /*
 (\_/)
 ( •_•)
 / >?? */
 
 const int N = 100005;
-int n, k, a[N];
+int n, c, a[N];
+int res;
 
 #define FILE_IO
 signed main(void) {
@@ -80,26 +78,29 @@ signed main(void) {
     freopen("cow.out","w",stdout);
     #endif
 
-    auto check = [&](const int &len) {
-        int cur = 1, p = 1;
-        while (cur < k) {
-            int pos = lower_bound(a + p, a + 1 + n, a[p] + len) - a;
-            if (pos > n) return false;
-            cur++; p = pos;
-        }
-        return cur >= k;
-    };
-
     int T; Read(T);
     while (T--) {
-        Read(n); Read(k);
+        Read(n); Read(c);
         FOR(i,1,n) Read(a[i]);
         sort(a + 1, a + 1 + n);
-        int lo = 0, hi = 1e9, mi;
-        int res = 0;
+        res = 0;
+        int lo = 0, hi = 1000000000, mi;
+        int m, k;
         while (lo <= hi) {
-            mi = lo + ((hi - lo) >> 1LL);
-            if (check(mi)) {
+            m = c;
+            mi = (lo + hi) >> 1;
+            for (int i = 1; i <= n; i++) {
+                if (m == c) {
+                    k = a[i];
+                    m--;
+                }
+                if (!m) break;
+                if (a[i] - k >= mi) {
+                    k = a[i];
+                    m--;
+                }
+            }
+            if (!m) {
                 res = mi;
                 lo = mi + 1;
             } else hi = mi - 1;
