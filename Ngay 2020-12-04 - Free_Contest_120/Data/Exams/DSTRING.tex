@@ -1,0 +1,54 @@
+\documentclass[12pt,a4paper,oneside]{article}
+\usepackage{hyperref}
+\usepackage[utf8]{vietnam}
+\usepackage[english]{babel}
+\usepackage{freecontest}
+\usepackage{verbatim}
+\usepackage{graphicx}
+
+\header{\LARGE Free Contest $120$}
+
+\begin{document}
+
+\problemtitle{DSTRING}
+
+\renewcommand{\baselinestretch}{1.25}
+\setlength{\parskip}{0.5em}
+
+\smallbreak\smallskip%
+
+\renewcommand{\baselinestretch}{1.0}
+\setlength{\parskip}{0.25em}
+Tony là một chuyên gia xử lý xâu. Anh ta rất thích những xâu không có hai chữ cái giống nhau liên tiếp, và gọi những xâu có tính chất này là xâu đẹp. 
+
+Cho bạn một xâu $s$ độ dài $n$. Bạn hãy giúp Tony xóa đi ít ký tự nhất có thể sao cho xâu còn lại là xâu đẹp. 
+
+
+\heading{Dữ liệu}
+
+\begin{itemize}
+    \item Input gồm một dòng duy nhất một dòng chứa xâu $s$ ($1 \le n \le 200000)$.
+\end{itemize}
+
+\heading{Kết quả}
+
+\begin{itemize}
+    \item In ra xâu đẹp có độ dài dài nhất có thể sau khi xóa các ký tự. Nếu có nhiều kết quả, bạn cần in ra xâu có thứ tự từ điển nhỏ nhất.
+\end{itemize}
+
+\heading{Ví dụ}
+
+\begin{example}
+        \exmp{%
+whhhoammmi
+        }{%
+whoamin
+        }%
+\end{example}
+
+\heading{Chấm điểm}
+\begin{itemize}
+    \item $50\%$ số test ứng với $50\%$ số điểm có $n \le 10000$
+\end{itemize}
+
+\end{document}

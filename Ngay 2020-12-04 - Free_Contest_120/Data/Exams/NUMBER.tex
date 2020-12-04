@@ -1,0 +1,78 @@
+\documentclass[12pt,a4paper,oneside]{article}
+
+\usepackage[utf8]{vietnam}
+\usepackage[english]{babel}
+\usepackage{freecontest}
+\usepackage{verbatim}
+
+\header{\LARGE Free Contest 120}
+
+\begin{document}
+
+\problemtitle{NUMBER}
+
+\renewcommand{\baselinestretch}{1.25}
+\setlength{\parskip}{1em}
+
+\renewcommand{\baselinestretch}{1.0}
+\setlength{\parskip}{0.25em}
+
+Viên và Tinh là một cặp bạn thân của nhau nhưng tính tình của hai bạn lại hơi ngược nhau. Vào một ngày đẹp trời, Trung tặng cho hai người số nguyên dương $S$ có $n$ chữ số và hai số nguyên dương khác là $k$ và $m$. Trung bảo rằng cả hai hãy xóa đi đúng $k$ chữ số của $S$ sao cho số mới $S_2$ thu được nguyên dương, không có chữ số $0$ ở đầu và phải chia hết cho $m$. \\
+Viên thì rất thích số nhỏ, còn Tinh lại thích số lớn cho nên là Viên quyết định tìm $S_2$ nhỏ nhất có thể và Tinh lại đi tìm $S_2$ lớn nhất có thể. \\
+Các bạn hãy giúp Viên và Tinh tìm ra hai số mong muốn của hai bạn. \\
+
+
+\heading{Dữ liệu}
+
+\begin{itemize}
+\item Dòng đầu tiên chứa số nguyên dương $S$.
+\item Dòng thứ hai chứa hai số nguyên dương $k, m$.
+
+\end{itemize}
+
+\heading{Kết quả}
+
+\begin{itemize}
+\item Dòng đầu tiên ghi ra số $S_2$ nhỏ nhất mà Viên muốn tìm.
+\item Dòng thứ hai ghi ra số $S_2$ lớn nhất mà Tinh muốn tìm.
+\item Với mỗi dòng, nếu không có số $S_2$ nào thõa mãn thì ghi ra \texttt{-1}.
+\end{itemize}
+
+\heading{Ví dụ}
+
+\begin{example}
+\exmp{%
+1357
+2 2
+}{%
+-1
+-1
+}%
+\exmp{%
+3086
+3 3
+}{%
+3
+6
+ }%
+
+  
+  
+\end{example}
+
+\heading{Giải thích}
+
+\begin{itemize}
+    \item Xóa đi 3 chữ số của $S = 3086$ ta có thể thu được một trong 4 số 3, 0, 8, 6.
+    \item Tuy nhiên vì $S_2$ phải nguyên dương nên số nhỏ nhất Viên muốn tìm là 3 và số lớn nhất Tinh muốn tìm là 6 (tuy 8 là số lớn nhất nhưng không chia hết cho 3)
+\end{itemize}
+
+\heading{Chấm điểm}
+\begin{itemize}
+    \item Trong tất cả mọi test thì $n, k \leq 1000$.
+    \item Subtask 1 ($25\%$ số điểm): $n, m, k \leq 50$.
+    \item Subtask 2 ($75\%$ số điểm): $n \times m \times k \leq 8 \times 10^6$.
+\end{itemize}
+
+
+\end{document}
