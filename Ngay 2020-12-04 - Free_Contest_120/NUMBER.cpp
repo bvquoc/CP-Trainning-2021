@@ -41,9 +41,6 @@ using ii = pair <int, int>;
 using ll = long long;
 using ld = long double;
 
-const int dx[] = {-1, 0, 1, 0};
-const int dy[] = { 0, 1, 0,-1};
-
 /*
 (\_/)
 ( •_•)
