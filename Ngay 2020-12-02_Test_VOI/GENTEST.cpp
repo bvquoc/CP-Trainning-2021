@@ -26,7 +26,7 @@ inline void Read(T& x) {
         if (c == '-') Neg = !Neg;
     x = c - '0';
     for (c = getchar(); c >= '0' && c <= '9'; c = getchar())
-        x = x * 10 + c - '0';
+        x = (x << 3) + (x << 1) + (c - '0');
     if (Neg) x = -x;
 }
 template <typename T>
@@ -118,7 +118,7 @@ signed main(void) {
     freopen("GENTEST.INP","r",stdin);
     freopen("GENTEST.OUT","w",stdout);
     #endif
-    Read(n); Read(m); M = n * (n - 1) / 2;
+    Read(n); Read(m); M = (ll) n * (n - 1) >> 1;
     FOR(i,1,m) Read(d[i]);
 
     FOR(i,1,m) {
