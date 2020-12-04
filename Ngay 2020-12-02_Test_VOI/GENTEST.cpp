@@ -1,4 +1,4 @@
-/* 𝙰𝚞𝚝𝚑𝚘𝚛: 𝙱𝚞𝚒 𝚅𝚒 𝚀𝚞𝚘𝚌 */
+/* Author: Bui Vi Quoc */
 #include <bits/stdc++.h>
 #define FastIO ios::sync_with_stdio(0); cin.tie(nullptr); cout.tie(nullptr);
 #define fi first
@@ -8,9 +8,11 @@
 #define REP(i, n) for(int i=0, _n=(n); i<_n; i++)
 #define FORE(i, v) for (__typeof((v).begin()) i = (v).begin(); i != (v).end(); ++i)
 #define ALL(v) (v).begin(), (v).end()
-#define BIT(x, i) (((x) >> (i)) & 1)
+#define sz(a) (int(a.size()))
+#define BIT(a, i) (((a) >> (i)) & 1LL)
 #define MASK(i) (1LL << (i))
-#define testBit(n, bit) (((n) >> (bit)) & 1LL)
+#define turnON(a, i) ((a) | MASK(i))
+#define turnOFF(a, i) ((a) & (~MASK(i)))
 #define flipBit(n, bit) ((n) ^ (1LL << (bit)))
 #define cntBit(n) __builtin_popcountll(n)
 #define sqr(x) ((x)*(x))
@@ -70,13 +72,36 @@ const int dy[] = { 0, 1, 0,-1};
 / >?? */
 
 const int MAX = 100005;
+const int N = 10000007;
 int n, m, M, d[MAX];
-vector <ii> E(1);
 
-int getPos(int d, int i) {
-    if (i == 1) return d;
-    if (::d[i-1] <= d) return getPos(d + 1, i-1);
-    return getPos(d, i - 1);
+int st[4 * N], child[4 * N][2];
+int sz = 1;
+int child_id(int idx, bool right) {
+    if(child[idx][right] == 0) child[idx][right] = ++sz;
+    return child[idx][right];
+}
+
+void update(int id, int l, int r, int pos, int val) {
+    if(pos < l || r < pos) return;
+    if(l == r) {
+        st[id] = val;
+        return ;
+    }
+    int mid = (l + r) / 2, lf = child_id(id, false), rt = child_id(id, true);
+    update(lf, l, mid, pos, val);
+    update(rt, mid + 1, r, pos, val);
+    st[id] = st[lf] + st[rt];
+}
+
+int getPos(int id, int l, int r, int val) {
+    if(l == r) return l;
+
+    int mid = (l + r) >> 1LL;
+    int lf = child_id(id, false), rt = child_id(id, true);
+
+    if((mid - l + 1) + st[lf] < val) return getPos(rt, mid + 1, r, val - (mid - l + 1 + st[lf]));
+    return getPos(lf, l, mid, val);
 }
 
 ii findComp(int pos) {
@@ -118,15 +143,16 @@ signed main(void) {
     freopen("GENTEST.INP","r",stdin);
     freopen("GENTEST.OUT","w",stdout);
     #endif
-    Read(n); Read(m); M = (ll) n * (n - 1) >> 1;
+    Read(n); Read(m); M = (int) n * (n - 1) >> 1;
     FOR(i,1,m) Read(d[i]);
 
+    int LIM = (int) n * n;
     FOR(i,1,m) {
-        int k = getPos(d[i], i);
+        int k = getPos(1, 1, LIM, d[i]);
         ii p = findComp(k);
         Write(p.first); putchar(' ');
         Write(p.second); putchar(endl);
+        update(1, 1, LIM, k, -1);
     }
-    
     return 0;
 }
