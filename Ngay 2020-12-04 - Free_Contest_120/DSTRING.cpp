@@ -49,13 +49,25 @@ const int dy[] = { 0, 1, 0,-1};
 ( •_•)
 / >?? */
 
-// #define FILE_IO
+string ans;
+char ch;
+char pref = '*';
+
+#define FILE_IO
 signed main(void) {
     FastIO;
     #ifdef FILE_IO
-    
+    freopen("DSTRING.INP","r",stdin);
+    freopen("DSTRING.OUT","w",stdout);
     #endif
-    
+    while (cin >> ch) {
+        if (ch != pref) {
+            ans += ch;
+            pref = ch;
+        }
+    }
+
+    cout << ans;
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
