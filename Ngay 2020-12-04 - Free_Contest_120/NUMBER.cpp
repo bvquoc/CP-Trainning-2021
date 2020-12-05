@@ -46,6 +46,69 @@ using ld = long double;
 ( •_•)
 / >?? */
 
+const int N = 1003;
+int n, k, m;
+vector <int> dp[N][N];
+string S;
+
+int calc(int i, int del, int mod) {
+    int &ans = dp[i][del][mod];
+    if (ans) return ans;
+    if (i == n) {
+        if (del == k && mod == 0) return ans = 1;
+        return ans = -1;
+    }
+    
+    ans = -1;
+    if (del < k && calc(i + 1, del + 1, mod) == 1) return ans = 1;
+    if (calc(i + 1, del, (mod * 10 + S[i] - '0') % m) == 1) return ans = 1;
+
+    return ans;
+}
+
+string findLargest() {
+    int i = 0, del = 0, mod = 0;
+    string res;
+
+    while (res.size() + k < S.size()) {
+        int j = i;
+        int mx = -1, p = i;
+        while (j < n && j - i + del <= k) {
+            if (calc(j + 1, del + j - i, (mod * 10 + S[j] - '0') % m) == 1) {
+                if (maximize(mx, S[j] - '0')) p = j;
+            }
+            ++j;
+        }
+        if (mx == -1 || (mx == 0 && i == 0)) return "-1";
+        res += S[p];
+        del += p - i; i = p + 1, mod = (mod * 10 + S[p] - '0') % m;
+    }
+
+    return (res.empty() ? "-1" : res);
+}
+
+string findSmallest() {
+    int i = 0, del = 0, mod = 0;
+    string res;
+    while (res.size() + k < S.size()) {
+        int j = i;
+        int mn = 10, p = i;
+        while (j < n && j - i + del <= k) {
+            if (calc(j + 1, del + j - i, (mod * 10 + S[j] - '0') % m) == 1) {
+                if ((S[j] != '0' || i != 0) && minimize(mn, S[j] - '0')) p = j;
+            }
+            ++j;
+        }
+        if (mn == 10) {
+            return "-1";
+        }
+        res += S[p];
+        del += p - i; i = p + 1, mod = (mod * 10 + S[p] - '0') % m;
+    }
+
+    return (res.empty() ? "-1" : res);
+}
+
 #define FILE_IO
 signed main(void) {
     FastIO;
@@ -53,7 +116,11 @@ signed main(void) {
     freopen("NUMBER.INP","r",stdin);
     freopen("NUMBER.OUT","w",stdout);
     #endif
-    
+    cin >> S; n = S.size();
+    cin >> k >> m;
+    FOR(i,0,n) FOR(j,0,k) dp[i][j].resize(m);
+    cout << findSmallest() << endl;
+    cout << findLargest();
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
