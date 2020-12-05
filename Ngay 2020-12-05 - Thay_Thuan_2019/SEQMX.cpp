@@ -58,16 +58,12 @@ double b[N], f[N];
 double psum[N];
 
 bool check(double d) {
-    double res=INT_MIN;
     FOR(i,1,n) b[i] = (double) a[i] - d;
     FOR(i,1,n) {
         psum[i] = psum[i-1] + b[i];
         f[i] = max(f[i-1] + b[i], b[i]);
     }
-    FOR(i,k,n) {
-        maximize(res, max(0.0,f[i-k]) + psum[i] - psum[i-k]);
-        if(res>=0) return true;
-    }
+    FOR(i,k,n) if(max(0.0,f[i-k]) + psum[i] - psum[i-k] >= 0) return true;
     return false;
 }
 
