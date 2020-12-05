@@ -81,9 +81,7 @@ signed main(void) {
     while (T--) {
         cin >> S;
         res = 1;
-        while (prev_permutation(ALL(S))) {
-            if (check(S)) res++;
-        }
+        while (prev_permutation(ALL(S))) if (check(S)) res++;
         Write(res);
         putchar(endl);
     }
