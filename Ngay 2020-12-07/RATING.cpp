@@ -148,6 +148,16 @@ signed main(void) {
             ENDL;
         }
     }
+
+    /* Subtask 4 */ 
+    ll x;
+    FOR(idx,1,q_sz) {
+        x = q[idx].first;
+        FOR(i, q[idx].second.first,q[idx].second.second) x = Abs(x - a[i]);
+        Write(x);
+        ENDL;
+    }
+    
     return 0;
 }
 
