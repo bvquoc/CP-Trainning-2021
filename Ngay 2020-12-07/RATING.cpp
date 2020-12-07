@@ -118,7 +118,7 @@ signed main(void) {
     }
 
     if (T == 3) {
-        auto getAns = [&](int &x, const int &cnt) {
+        auto getAns = [&](int &x, int &cnt) {
             if (x > a[1] * cnt) return x - a[1] * cnt;
 
             int res = 0, k = a[1];
@@ -131,6 +131,7 @@ signed main(void) {
                 } else hi = mi - 1;
             }
 
+            cnt -= res;
             x -= res * k;
             res = x;
             if (cnt & 1) res = k - x;
