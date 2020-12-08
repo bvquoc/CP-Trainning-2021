@@ -60,7 +60,7 @@ using ld = long double;
 
 const int N = 100005;
 int n, a[N], res = LLONG_MIN;
-int psum[N], f[N];
+int psum[N], f[N], g[N];
 
 int Sum(const int &l, const int &r) {
     return psum[r-1] - psum[l-1];
@@ -84,13 +84,17 @@ signed main(void) {
     if (n <= 300) { /* Subtask 1 */
         FOR(x1, 1, n+1) FOR(x2, x1, n+1) FOR(x3, x2, n+1) 
             maximize(res, Sum(1, x1) - Sum(x1, x2) + Sum(x2, x3) - Sum(x3, n+1));
-    } else if (n <= 5000) { /* Subtask 2 */
+    } else 
+    { /* Subtask 2 */
+        FOR(i,1,n+1) f[i] = LLONG_MIN;
+        FOR(x1, 1, n+1) FOR(x2, x1, n+1) maximize(f[x2], Sum(1, x1) - Sum(x1, x2));
+        
         FOR(x2, 1, n+1) {
-            f[x2] = LLONG_MIN;
-            FOR(x3, x2, n+1) maximize(f[x2], Sum(x2, x3) - Sum(x3, n+1));
+            g[x2] = LLONG_MIN;
+            FOR(x3, x2, n+1) maximize(g[x2], Sum(x2, x3) - Sum(x3, n+1));
         }
-        FORD(x, n, 1) maximize(f[x], f[x+1]);
-        FOR(x1, 1, n+1) FOR(x2, x1, n+1) maximize(res, Sum(1, x1) - Sum(x1, x2) + f[x2]);
+
+        FOR(i,1,n+1) maximize(res, f[i] + g[i]);
     }
 
     cout << res;
