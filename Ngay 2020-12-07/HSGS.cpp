@@ -8,7 +8,7 @@
 #define REP(i, n) for(int i=0, _n=(n); i<_n; i++)
 #define FORE(i, v) for (__typeof((v).begin()) i = (v).begin(); i != (v).end(); ++i)
 #define ALL(v) (v).begin(), (v).end()
-#define sz(a) (int(a.size()))
+#define sz(a) (signed(a.size()))
 #define BIT(a, i) (((a) >> (i)) & 1LL)
 #define MASK(i) (1LL << (i))
 #define turnON(a, i) ((a) | MASK(i))
@@ -17,7 +17,7 @@
 #define cntBit(n) __builtin_popcountll(n)
 #define sqr(x) ((x)*(x))
 #define endl '\n'
-// #define int long long
+#define int long long
 using namespace std;
 
 template <typename T>
@@ -125,12 +125,15 @@ signed main(void) {
     #define EXIT exit(0)
     #define ENDL putchar('\n')
 
-    // if (T <= 4) {
+    // if (T == 2) {
+    //     EXIT;
+    // }
+    if (T <= 4) {
         Try(1);
         if (res == LLONG_MAX) res = -1;
-        cout << res;
+        Write(res);
         EXIT;
-    // }
+    }
 
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
