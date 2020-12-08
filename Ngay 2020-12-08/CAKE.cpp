@@ -57,7 +57,6 @@ struct Cake {
 
 map <int, int> f[N];
 
-
 bool solved(const int &id, const int &T) {
     return (f[id].find(T) != f[id].end());
 }
