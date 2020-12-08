@@ -1,0 +1,7 @@
+﻿$jury_correct
+$jury_model
+$jury_no_freopen
+$jury_print_sample
+$jury_sub1
+$jury_sub2
+$jury_sub3

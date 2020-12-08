@@ -1,0 +1,8 @@
+Comparing files FASTTYPE.OUT and FASTTYPE.ANS
+***** FASTTYPE.OUT
+kkbkkbkkkb
+***** FASTTYPE.ANS
+kkbkdbkdkb
+*****
+
+Test 1: WRONG!
