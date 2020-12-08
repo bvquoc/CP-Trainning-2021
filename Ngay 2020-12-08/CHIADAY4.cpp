@@ -84,8 +84,7 @@ signed main(void) {
     if (n <= 300) { /* Subtask 1 */
         FOR(x1, 1, n+1) FOR(x2, x1, n+1) FOR(x3, x2, n+1) 
             maximize(res, Sum(1, x1) - Sum(x1, x2) + Sum(x2, x3) - Sum(x3, n+1));
-    } else 
-    { /* Subtask 2 */
+    } else if (n <= 3000) { /* Subtask 2 */
         FOR(i,1,n+1) f[i] = LLONG_MIN;
         FOR(x1, 1, n+1) FOR(x2, x1, n+1) maximize(f[x2], Sum(1, x1) - Sum(x1, x2));
         
@@ -95,6 +94,24 @@ signed main(void) {
         }
 
         FOR(i,1,n+1) maximize(res, f[i] + g[i]);
+    } else { /* Subtask 3 */
+        ll cur = 0;
+        FOR(i,1,n) {
+            cur = min(1LL * a[i], cur + a[i]);
+            f[i] = min(f[i-1], cur);
+        }
+
+        cur = 0;
+        FOR(i,1,n) {
+            cur += a[i];
+            f[i] = cur - f[i] * 2;
+        }
+
+        ll s = 0;
+        FORD(i,n,0) {
+            maximize(res, f[i] - s);
+            s += a[i];
+        }
     }
 
     cout << res;
