@@ -118,35 +118,25 @@ signed main(void) {
     }
 
     if (T == 3) {
-        auto getAns = [&](int &x, int &cnt) {
-            if (x > a[1] * cnt) return x - a[1] * cnt;
-
-            int res = 0, k = a[1];
-            int lo = 0, hi = cnt, mi;
-            while (lo <= hi) {
-                mi = (lo + hi) >> 1;
-                if (x > mi * k) {
-                    res = mi;
-                    lo = mi + 1;
-                } else hi = mi - 1;
-            }
-
-            cnt -= res;
-            x -= res * k;
-            res = x;
-            if (cnt & 1) res = k - x;
-            
-            return res;
-        };
-
-        int l, r, x, cnt;
         FOR(i,1,q_sz) {
-            x = q[i].first;
-            l = q[i].second.first, r = q[i].second.second;
-            cnt = r - l + 1;
-            Write(getAns(x, cnt));
+            int x = q[i].first, l = q[i].second.first, r = q[i].second.second;
+
+            int c = r - l + 1;
+            if (x < 0) x = Abs(x - a[1]), c--;
+
+            if (a[1] == 0) {
+                Write(x);
+                ENDL;
+                continue;
+            }
+            
+            int d = min(c, x / a[1]);
+            x -= a[1] * d, c -= d;
+            if (c & 1) x = a[1] - x;
+            Write(x); 
             ENDL;
         }
+        EXIT;
     }
 
     /* Subtask 4 */ 
