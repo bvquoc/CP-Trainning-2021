@@ -14,8 +14,20 @@
 #define cntBit(n) __builtin_popcountll(n)
 #define sqr(x) ((x)*(x))
 #define endl '\n'
-// #define int long long
+#define int long long
 using namespace std;
+
+template <typename T>
+inline void Read(T& x) {
+    bool Neg = false;
+    char c;
+    for (c = getchar(); c < '0' || c > '9'; c = getchar())
+        if (c == '-') Neg = !Neg;
+    x = c - '0';
+    for (c = getchar(); c >= '0' && c <= '9'; c = getchar())
+        x = (x << 3) + (x << 1) + (c - '0');
+    if (Neg) x = -x;
+}
 
 template<class T> T Abs(const T &x) { return (x < 0 ? -x : x); }
 template<class X, class Y>
@@ -47,7 +59,7 @@ using ld = long double;
 / >?? */
 
 const int N = 100005;
-int n, a[N];
+int n, a[N], res = LLONG_MIN;
 int psum[N];
 
 int Sum(const int &l, const int &r) {
@@ -62,13 +74,22 @@ signed main(void) {
     freopen("CHIADAY4.OUT","w",stdout);
     #endif
 
-    cin >> n;
+    Read(n);
     FOR(i,1,n) {
-        cin >> a[i];
+        Read(a[i]);
         psum[i] = a[i] + psum[i-1];
     }
 
-    
+
+    if (n <= 300) { /* Subtask 1 */
+        FOR(x1, 1, n+1) FOR(x2, x1, n+1) FOR(x3, x2, n+1) 
+            maximize(res, Sum(1, x1) - Sum(x1, x2) + Sum(x2, x3) - Sum(x3, n+1));
+    } else 
+    if (n <= 5000) {
+
+    }
+
+    cout << res;
 
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
