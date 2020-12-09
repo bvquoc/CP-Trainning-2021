@@ -17,7 +17,7 @@
 #define cntBit(n) __builtin_popcountll(n)
 #define sqr(x) ((x)*(x))
 #define endl '\n'
-// #define int long long
+#define int long long
 using namespace std;
 
 template<class T> T Abs(const T &x) { return (x < 0 ? -x : x); }
@@ -50,31 +50,32 @@ using ld = long double;
 / >?? */
 
 const int N = 100005;
-int n, T;
+int n, T, res = 0;
 struct Cake {
-    int pos, time;
+    int pos, time, id;
 } a[N];
 
-map <int, int> f[N];
-
-bool solved(const int &id, const int &T) {
-    return (f[id].find(T) != f[id].end());
-}
-
-int dp(const int &id, const int &T, const int &pos) {
-    if (T < 0) return 0;
-    if (id == n) {
-        if (T >= Abs(pos - a[id].pos) + a[id].time) return 1;
-        return 0;
+struct FenwickTree {
+    int n; vector<int> v;
+    void assign(int _n) {
+        n = _n;
+        v.assign(n + 7, 0);
     }
-    
-    if (solved(id, T)) return f[id][T];
-    int &ans = f[id][T]; ans = 0;
-    if (T >= a[id].time + Abs(pos - a[id].pos)) ans = 1 + dp(id + 1, T - a[id].time - Abs(pos - a[id].pos), a[id].pos);
-    maximize(ans, dp(id+1, T - Abs(a[id].pos - pos), a[id].pos));
+    FenwickTree(int _n = 0) { assign(_n); }
 
-    return ans;
-}
+    void update(int x, int d) {
+        for (; x <= n; x += x & -x) v[x] += d;
+    }
+
+    int get(int x) const {
+        int res = 0;
+        for (; x >= 1; x &= x - 1) res += v[x];
+        return res;
+    }
+    int getSum(int l, int r) const {
+        return l == 1 ? get(r) : get(r) - get(l - 1);
+    }
+} sum, cnt;
 
 #define FILE_IO
 signed main(void) {
@@ -86,7 +87,32 @@ signed main(void) {
     cin >> n >> T;
     FOR(i,1,n) cin >> a[i].pos >> a[i].time;
 
-    cout << dp(1,T,0);
+    /* compress */ {
+        vector <ii> tmp;
+        FOR(i,1,n) tmp.push_back(ii(a[i].time, i));
+        sort(ALL(tmp));
+        REP(i,n) a[tmp[i].second].id = i + 1;
+    }
+
+    sum.assign(n); cnt.assign(n);
+
+    FOR(i,1,n) {
+        int cur_time = T - a[i].pos;
+        if (cur_time <= 0) break;
+        cnt.update(a[i].id, 1);
+        sum.update(a[i].id, a[i].time);
+        int lo = 1, hi = n, mi, ans = 0;
+        while (lo <= hi) {
+            mi = (lo + hi) >> 1;
+            int cur_sum = sum.get(mi);
+            if (cur_sum <= cur_time) {
+                ans = mi;
+                lo = mi + 1;
+            } else hi = mi - 1;
+        }
+        if (ans) maximize(res, cnt.get(ans));
+    }
+    cout << res;
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
