@@ -173,6 +173,20 @@ signed main(void) {
         }
         EXIT;
     }
+
+    FOR(id, 1, q_sz) {
+        if (q[id].type == 1) {
+            int u = q[id].u, v = q[id].v;
+            if (DSU.unite(u, v)) {
+                adj[u].emplace_back(ii(v, q[id].w));
+                adj[v].emplace_back(ii(u, q[id].w));
+            }
+        } else {
+            dijkstra(q[id].u);
+            Write(ans[q[id].u]);
+            ENDL;
+        }
+    }
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
