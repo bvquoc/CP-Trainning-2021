@@ -63,10 +63,8 @@ int dp(const int &div, const int &pos) {
     if (solved(div, pos)) return f[div][pos];
     int ans = INF;
     for (int x: ::pos[div + 1]) {
-        int cost = 0;
-        if (div == 1) cost = 1;
-        if (x > pos) cost += (x - pos);
-        else cost += (n - pos) + x;
+        int cost = (div == 1 ? 1 : 0);
+        cost += (x > pos ? (x - pos) : (n - pos) + x);
         minimize(ans, cost + dp(div + 1, x));
     }
     f[div][pos] = ans;
