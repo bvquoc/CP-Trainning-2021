@@ -87,7 +87,7 @@ void Try(int id) {
 
     FOR(i,1,n) if (!mark[i]) {
         double tmp = d[order[id-1]][i];
-        if (cur + tmp > res) continue;
+        if (cur + tmp >= res) continue;
         order[id] = i;
         mark[i] = true;
         cur += tmp;
