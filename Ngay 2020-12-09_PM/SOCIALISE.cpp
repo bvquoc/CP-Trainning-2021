@@ -49,6 +49,10 @@ using ld = long double;
 ( •_•)
 / >?? */
 
+const int N = 302;
+int n, a[N];
+map <int, int> cnt;
+
 #define FILE_IO
 signed main(void) {
     FastIO;
@@ -56,7 +60,30 @@ signed main(void) {
     freopen("SOCIALISE.INP","r",stdin);
     freopen("SOCIALISE.OUT","w",stdout);
     #endif
-    
+    cin >> n;
+    FOR(i,1,n) a[i];
+    // sort(a + 1, a + 1 + n);
+
+    // int ans, LIM = a[n] + 1;
+    // FOR(g,1,n) {
+    //     ans = -1;
+    //     int lo = 1, hi = LIM, mi;
+    //     while (lo <= hi) {
+    //         mi = lo + ((hi - lo) >> 1);
+    //         cnt.clear();
+    //         FOR(i,1,n) cnt[trunc(a[i] / mi)]++;
+    //         bool ok = false;
+    //         for (ii x: cnt) if (x.second == g) {
+    //             ok = true;
+    //             break;
+    //         }
+    //         if (ok) {
+    //             ans = mi;
+    //             hi = mi - 1;
+    //         } else lo = mi + 1;
+    //     }
+    //     cout << ans << endl;
+    // }
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
