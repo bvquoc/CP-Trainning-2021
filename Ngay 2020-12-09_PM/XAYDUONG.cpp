@@ -80,8 +80,8 @@ struct DisjointSet {
     int n; vector <int> father, height;
     void assign(int sz) {
         n = sz;
-        father.resize(n+1);
-        height.resize(n+1);
+        father.resize(n+7);
+        height.resize(n+7);
         for (int i=1; i<=n; i++) {
             father[i] = i;
             height[i] = 0;
@@ -90,9 +90,7 @@ struct DisjointSet {
     DisjointSet () { assign(1e5); }
     DisjointSet (int sz) { assign(sz); }
     int find(int node) {
-        if (father[node] != node) {
-            father[node] = find(father[node]);
-        }
+        if (father[node] != node) father[node] = find(father[node]);
         return father[node];
     }
     bool unite(int A, int B) {
@@ -100,8 +98,9 @@ struct DisjointSet {
         int rootB = find(B);
         if (rootA == rootB) return false;
 
-        if (rand() % 2) father[rootB] = rootA;
-        else father[rootA] = rootB;
+        if (height[rootA] == height[rootB]) height[rootA]++;
+        if (height[rootA] < height[rootB]) father[rootA] = rootB;
+        else father[rootB] = rootA;
 
         return true;
     }
@@ -119,7 +118,7 @@ void dijkstra(const int &st) {
         int du = pq.top().first;
         pq.pop();
 
-        if (du!=d[u]) continue;
+        if (du != d[u]) continue;
 
         for (ii e: adj[u]) {
             int v = e.first, uv = e.second;
@@ -187,6 +186,5 @@ signed main(void) {
             ENDL;
         }
     }
-    // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
