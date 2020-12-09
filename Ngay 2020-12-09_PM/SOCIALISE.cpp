@@ -70,7 +70,7 @@ using ld = long double;
 
 const int N = 302, INF = INT_MAX;
 int n, a[N], LIM = INT_MIN;
-int ans[N], cnt[100005];
+int ans[N], cnt[1000006];
 
 #define FILE_IO
 signed main(void) {
@@ -87,34 +87,31 @@ signed main(void) {
     
     #define subtask1 (n <= 100 && LIM <= 100000)
 
-    if (subtask1) {
-        FOR(i,1,n) ans[i] = INF;
+    FOR(i,1,n) ans[i] = INF;
 
-        vector <int> cur;
-        FOR(d, 1, LIM+1) {
-            memset(cnt, 0, sizeof cnt);
-            cur.clear();
-            FOR(i,1,n) {
-                cnt[a[i] / d]++;
-                cur.push_back(a[i] / d);
-            }
-            for (auto x: cur) minimize(ans[cnt[x]], d);
-
-            int cnt = 0;
-            FOR(i,1,n) if (ans[i] != INF) cnt++;
-            if (cnt == n) break;
-        }
-
+    vector <int> cur;
+    FOR(d, 1, LIM+1) {
+        memset(cnt, 0, sizeof cnt);
+        cur.clear();
         FOR(i,1,n) {
-            if (ans[i] == INF) {
-                putchar('-');
-                putchar('1');
-            } else Write(ans[i]);
-            putchar(endl);
+            cnt[a[i] / d]++;
+            cur.push_back(a[i] / d);
         }
-        exit(0);
+        for (auto x: cur) minimize(ans[cnt[x]], d);
+
+        int cnt = 0;
+        FOR(i,1,n) if (ans[i] != INF) cnt++;
+        if (cnt == n) break;
     }
 
-    // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
+    FOR(i,1,n) {
+        if (ans[i] == INF) {
+            putchar('-');
+            putchar('1');
+        } else Write(ans[i]);
+        putchar(endl);
+    }
+    
+    cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
