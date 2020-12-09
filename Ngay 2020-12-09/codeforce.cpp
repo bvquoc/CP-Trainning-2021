@@ -17,7 +17,7 @@
 #define cntBit(n) __builtin_popcountll(n)
 #define sqr(x) ((x)*(x))
 #define endl '\n'
-// #define int long long
+#define int long long
 using namespace std;
 
 template<class T> T Abs(const T &x) { return (x < 0 ? -x : x); }
@@ -49,7 +49,7 @@ using ld = long double;
 ( •_•)
 / >?? */
 
-const int N = 200005, INF = INT_MAX;
+const int N = 200005, INF = LLONG_MAX;
 int n, k, a[N];
 vector <int> pos[N];
 map <int, int> f[N];
@@ -62,6 +62,15 @@ int dp(const int &div, const int &pos) {
     if (div == k) return 0;
     if (solved(div, pos)) return f[div][pos];
     int ans = INF;
+    for (int x: ::pos[div + 1]) {
+        int cost = 0;
+        if (div == 1) cost = 1;
+        if (x > pos) cost += (x - pos);
+        else cost += (n - pos) + x;
+        minimize(ans, cost + dp(div + 1, x));
+    }
+    f[div][pos] = ans;
+    return ans;
 }
 
 #define FILE_IO
@@ -79,10 +88,9 @@ signed main(void) {
     
     int res = INF;
     for (auto x: pos[1]) {
-        // FOR(i,1,n) f[i].clear();
         minimize(res, dp(1, x));
     }
-
+    cout << res;
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
