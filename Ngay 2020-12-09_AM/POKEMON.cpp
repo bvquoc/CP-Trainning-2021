@@ -65,36 +65,38 @@ using ld = long double;
 ( •_•)
 / >?? */
 
-const int N = 45;
+const int N = 45, M = 20;
 int n, m;
 struct Data { int x, y, t; } q[N];
+double res = DBL_MAX;
+vector <int> idx_of[M];
 
-double res = DBL_MAX, cur = 0.0;
-int order[N]; bool mark[N];
+double d[N][N];
 double dist(const Data &A, const Data &B) {
     ll tmp = 1LL * sqr(A.x - B.x) + sqr(A.y - B.y);
     return sqrt(tmp);
 }
-double d[N][N];
 
-void Try(int id) {
-    if (id > n) {
-        // FOR(i,1,n) cout << order[i] << ' ';
-        // cout << cur << endl;
-        res = cur;
-        return;
+double f[N][N][2];
+double dp(const int &id, const int &type, const bool &rooted) {
+    if (type == m) {
+        if (rooted) return 0;
+        return d[id][0];
+    }
+    
+    if (f[id][type][rooted] != -1) return f[id][type][rooted];
+    
+    double &ans = f[id][type][rooted];
+    ans = DBL_MAX;
+
+    if (rooted) {
+        for (int j: idx_of[type + 1]) minimize(ans, d[id][j] + dp(j, type+1, 1));
+    } else {
+        for (int j: idx_of[type + 1]) minimize(ans, d[id][j] + dp(j, type+1, 0));
+        for (int j: idx_of[type + 1]) minimize(ans, d[0][id] + d[id][j] + dp(j, type+1, 1));
     }
 
-    FOR(i,1,n) if (!mark[i]) {
-        double tmp = d[order[id-1]][i];
-        if (cur + tmp >= res) continue;
-        order[id] = i;
-        mark[i] = true;
-        cur += tmp;
-        Try(id+1);
-        cur -= tmp;
-        mark[i] = false;
-    }
+    return ans;
 }
 
 #define FILE_IO
@@ -110,14 +112,47 @@ signed main(void) {
         Read(q[i].x);
         Read(q[i].y);
         Read(q[i].t);
+        idx_of[q[i].t].push_back(i);
     }
 
-    order[0] = 0;
-    FOR(i,0,n) FOR(j,0,n) d[i][j] = dist(q[i], q[j]);
-    Try(1);
-    cout << fixed << setprecision(3) << res;
+    /* init */ {
+        FOR(i,0,n) FOR(j,0,n) d[i][j] = dist(q[i], q[j]);
+        FOR(i,1,n) FOR(j,1,n) REP(k,2) f[i][j][k] = -1;
+    }
 
-    #define subtask_1 (n <= 17 && m == n)
+    for (auto id: idx_of[1]) minimize(res, dp(id, 1, 0));
+
+    cout << fixed << setprecision(3) << res;
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
+
+
+
+    // #define subtask_1 (n <= 17 && m == n)
+    // order[0] = 0;
+    // FOR(i,0,n) FOR(j,0,n) d[i][j] = dist(q[i], q[j]);
+    // Try(1);
+
+// int order[N]; bool mark[N];
+// double d[N][N];
+
+// void Try(int id) {
+//     if (id > n) {
+//         // FOR(i,1,n) cout << order[i] << ' ';
+//         // cout << cur << endl;
+//         res = cur;
+//         return;
+//     }
+
+//     FOR(i,1,n) if (!mark[i]) {
+//         double tmp = d[order[id-1]][i];
+//         if (cur + tmp >= res) continue;
+//         order[id] = i;
+//         mark[i] = true;
+//         cur += tmp;
+//         Try(id+1);
+//         cur -= tmp;
+//         mark[i] = false;
+//     }
+// }
