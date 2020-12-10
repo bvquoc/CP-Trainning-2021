@@ -46,6 +46,19 @@ using ld = long double;
 ( •_•)
 / >?? */
 
+struct Point {
+    int x, y;
+    Point () { x = 0; y = 0; }
+    Point (int _x, int _y) { x = _x; y = _y; }
+    bool operator == (const Point &p) const { return (x == p.x && y == p.y); }
+    bool operator < (const Point &p) const { return (y == p.y ? x < p.x : y < p.y); }
+    bool operator != (const Point &p) const { return (x != p.x || y != p.y); }
+};
+istream& operator >> (istream &is, Point &p) { return is >> p.x >> p.y; }
+
+const int N = 100005;
+int n; Point a[N];
+
 #define FILE_IO
 signed main(void) {
     FastIO;
@@ -53,7 +66,9 @@ signed main(void) {
     freopen("DIFTRI.INP","r",stdin);
     freopen("DIFTRI.OUT","w",stdout);
     #endif
+    cin >> n;
+    FOR(i,1,n) cin >> a[i];
     
-    // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
+    cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
