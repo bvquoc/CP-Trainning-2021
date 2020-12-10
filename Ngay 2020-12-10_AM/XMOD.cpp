@@ -60,6 +60,11 @@ signed main(void) {
     FOR(i,1,n) cin >> a[i];
     FOR(i,1,m) cin >> b[i];
 
+    /* compress */ {
+        sort(a + 1, a + 1 + n);
+        n = unique(a + 1, a + 1 + n) - a - 1;
+    }
+
     #define subtask_1 (n <= 1000 && m <= 1000)
 
     FOR(i,1,m) {
