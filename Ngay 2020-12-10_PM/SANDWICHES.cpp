@@ -74,12 +74,14 @@ int n, k, a[N];
 int f[N][3*N];
 int dp(const int n, const int k) {
     if (n == 0 && k == 0) return 0;
+
     if (n * k == 0) return -INF;
     if (k < n || k > 2 * n) return -INF;
     if (f[n][k] != -1) return f[n][k];
 
     int &ans = f[n][k];
     FOR(i,1,n) maximize(ans, a[i] + max(dp(n - i, k - i), dp(n - i, k - i - 1)));
+
     return ans;
 }
 
@@ -103,6 +105,6 @@ signed main(void) {
     int res = dp(n, k);
     if (res <= -INF) cout << "Impossible";
     else Write(res);
-    // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
+
     return 0;
 }
