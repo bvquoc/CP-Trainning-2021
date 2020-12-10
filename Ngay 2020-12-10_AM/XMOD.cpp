@@ -1,4 +1,5 @@
 /* Author: Bui Vi Quoc */
+// http://csloj.ddns.net/problem/1362
 #include <bits/stdc++.h>
 #define FastIO ios::sync_with_stdio(0); cin.tie(nullptr); cout.tie(nullptr);
 #define fi first
