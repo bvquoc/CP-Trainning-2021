@@ -68,7 +68,7 @@ using ld = long double;
 ( •_•)
 / >?? */
 
-const int N = 100005, INF = 2e18 + 7;
+const int N = 100005, INF = LLONG_MAX;
 int n, k, a[N], psum[N];
 
 int calc(const int &n) {
