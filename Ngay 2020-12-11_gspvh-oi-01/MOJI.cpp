@@ -268,6 +268,9 @@ signed main(void) {
 
     if (subtask_3) {
         sort(e1 + 1, e1 + m + 1, [](const Edge &A, const Edge &B) {
+            if ((isStore[B.u] || isStore[B.v]) && (isStore[A.u] || isStore[A.v])) return (A.w > B.w || (A.w == B.w && A.id > B.id));
+            if (isStore[A.u] || isStore[A.v]) return true;
+            if (isStore[B.u] || isStore[B.v]) return false;
             return (A.w > B.w || (A.w == B.w && A.id > B.id));
         });
 
