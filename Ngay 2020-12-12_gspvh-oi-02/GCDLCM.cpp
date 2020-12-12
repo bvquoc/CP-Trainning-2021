@@ -116,9 +116,22 @@ signed main(void) {
         }
         exit(0);
     }
-    
+
     while (T--) {
         clear_map();
+        /* Read input */ {
+            cin >> n >> q_sz;
+            string s; int x, y, z;
+            while (q_sz--) {
+                cin >> s >> x >> y >> z;
+                if (s == "GCD") ;
+                else ;
+            }
+        }
+        
+        ok = (subtask <= 3);
+        if (ok) YES;
+        else NO;
     }
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
