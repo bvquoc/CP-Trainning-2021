@@ -117,11 +117,6 @@ signed main(void) {
     }
 
     cout << "TRETRAU";
-    // if (ans.empty()) cout << "TRETRAU";
-    // else {
-    //     cout << sz(ans) << endl;
-    //     cout << ans;
-    // }
 
     return 0;
 }
