@@ -116,12 +116,12 @@ signed main(void) {
         exit(0);
     }
 
+    cout << "TRETRAU";
     // if (ans.empty()) cout << "TRETRAU";
     // else {
     //     cout << sz(ans) << endl;
     //     cout << ans;
     // }
 
-    cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
