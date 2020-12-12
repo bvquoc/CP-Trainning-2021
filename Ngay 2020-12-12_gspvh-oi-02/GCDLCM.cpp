@@ -51,27 +51,26 @@ using ld = long double;
 
 #define NO putchar('N')
 #define YES putchar('Y')
-// #define _gcd(x, y) Abs(__gcd(x, y))
 
 const int N = 10004, INF = 2e18 + 7;
 int n, a[N], q_sz, LIM;
 bool ok;
+int GCD[1003][1003];
+int LCM[1003][1003];
 
-map <int, ll> GCD[N], LCM[N];
-
-void Try(const int &id, const vector <vector <int> > &gcd, const vector <vector <int> > &lcm) {
+void Try(const int &id) {
     if (ok) return;
     if (id > n) {
         FOR(i,1,n) FOR(j,1,n) {
-            if (gcd[i][j] != -1 && __gcd(a[i], a[j]) != gcd[i][j]) return;
-            if (lcm[i][j] != -1 && (1LL * a[i] * a[j] / __gcd(a[i], a[j])) != lcm[i][j]) return;
+            if (GCD[i][j] != -1 && __gcd(a[i], a[j]) != GCD[i][j]) return;
+            if (LCM[i][j] != -1 && (1LL * a[i] * a[j] / __gcd(a[i], a[j])) != LCM[i][j]) return;
         }
         ok = true;
         return;
     }
     FOR(j,1,LIM) {
         a[id] = j;
-        Try(id + 1, gcd, lcm);
+        Try(id + 1);
     }
 }
 
@@ -83,10 +82,10 @@ signed main(void) {
     freopen("GCDLCM.OUT","w",stdout);
     #endif
 
-    auto clear_map = [&]() {
-        FOR(i,1,n) {
-            GCD[i].clear();
-            LCM[i].clear();
+    auto prepare = [&]() {
+        FOR(i,1,n) FOR(j,1,n) {
+            GCD[i][j] = -1;
+            LCM[i][j] = -1;
         }
     };
 
@@ -96,21 +95,19 @@ signed main(void) {
     if (subtask == 1) {
         while (T--) {
             cin >> n >> q_sz;
-            vector <vector <int> > gcd(n + 2, vector <int> (n + 2, -1));
-            vector <vector <int> > lcm(n + 2, vector <int> (n + 2, -1));
-
+            prepare();
             /* Read input */ {
                 string s; int x, y, z;
                 while (q_sz--) {
                     cin >> s >> x >> y >> z;
-                    if (s == "GCD") gcd[x][y] = z;
-                    else lcm[x][y] = z;
+                    if (s == "GCD") GCD[x][y] = z;
+                    else LCM[x][y] = z;
                 }
             }
             
             LIM = 100;
             ok = false;
-            Try(1, gcd, lcm);
+            Try(1);
             if (ok) YES;
             else NO;
         }
@@ -118,7 +115,6 @@ signed main(void) {
     }
 
     while (T--) {
-        clear_map();
         /* Read input */ {
             cin >> n >> q_sz;
             string s; int x, y, z;
@@ -133,6 +129,5 @@ signed main(void) {
         if (ok) YES;
         else NO;
     }
-    // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
