@@ -17,7 +17,7 @@
 #define cntBit(n) __builtin_popcountll(n)
 #define sqr(x) ((x)*(x))
 #define endl '\n'
-// #define int long long
+#define int long long
 using namespace std;
 
 template<class T> T Abs(const T &x) { return (x < 0 ? -x : x); }
@@ -90,6 +90,8 @@ string query_1(string s) {
     return res;
 }
 
+const int MOD = 1000000007;
+
 #define FILE_IO
 signed main(void) {
     FastIO;
@@ -98,6 +100,16 @@ signed main(void) {
     freopen("MATH.OUT","w",stdout);
     #endif
     
+    auto toStr = [&](ll x) {
+        string res = "";
+        do {
+            res += (x % 10) + '0';
+            x /= 10;
+        } while (x != 0);
+        reverse(ALL(res));
+        return res;
+    };
+
     int numTests; cin >> numTests;
 
     int type;
@@ -106,6 +118,27 @@ signed main(void) {
         if (type == 1) {
             string k; cin >> k;
             cout << query_1(k) << endl;
+            continue;
+        }
+        ll k, res = 0;
+        if (type == 2) {
+            cin >> k;
+            for (int x = MASK(k); x < MASK(k+1); x++) {
+                if (query_1(toStr(x)) != "NO") {
+                    res++;
+                    if (res >= MOD) res -= MOD;
+                }
+            }
+            cout << res << endl;
+        } else {
+            cin >> k;
+            for (int x = 1; x < MASK(k+1); x++) {
+                if (query_1(toStr(x)) != "NO") {
+                    res++;
+                    if (res >= MOD) res -= MOD;
+                }
+            }
+            cout << res << endl;
         }
     }
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
