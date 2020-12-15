@@ -52,8 +52,6 @@ using ld = long double;
 const int MAX = -1;
 const int MOD = 1000000007;
 
-int T, type;
-
 string div2(string s) {
     string res;
     res.resize(s.size());
