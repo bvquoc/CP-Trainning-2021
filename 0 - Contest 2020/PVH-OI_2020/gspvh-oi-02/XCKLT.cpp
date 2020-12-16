@@ -51,7 +51,13 @@ using ld = long double;
 const int MAX = 502, INF = 1e9;
 string A, B, C;
 string ans = "";
+
 int f[MAX][MAX][MAX];
+short trace_i[MAX][MAX][MAX];
+short trace_j[MAX][MAX][MAX];
+short trace_k[MAX][MAX][MAX];
+char trace_x[MAX][MAX][MAX];
+
 
 #define FILE_IO
 signed main(void) {
@@ -81,7 +87,10 @@ signed main(void) {
             int newK = (tmp == C[k+1] ? k + 1 : k);
             if (newK < p) {
                 if (minimize(f[newI][newJ][newK], f[i][j][k] + 1)) {
-
+                    trace_i[newI][newJ][newK] = i;
+                    trace_j[newI][newJ][newK] = j;
+                    trace_k[newI][newJ][newK] = k;
+                    trace_x[newI][newJ][newK] = tmp;
                 }
             }
         }
@@ -93,10 +102,23 @@ signed main(void) {
         exit(0);
     }
 
-    
+    short I = m, J = n, K;
+    FOR(i, 0, p-1) if (f[m][n][i] == res) K = i;
+
+    while (I != 0 || J != 0) {
+        ans += trace_x[I][J][K];
+        short tmp_i = trace_i[I][J][K];
+        short tmp_j = trace_j[I][J][K];
+        short tmp_k = trace_k[I][J][K];
+        I = tmp_i;
+        J = tmp_j;
+        K = tmp_k;
+    }
 
     cout << res << endl;
+    reverse(ALL(ans));
     cout << ans;
 
+    // cout << "\nTime: " << (double) clock() / 1000.0;
     return 0;
 }
