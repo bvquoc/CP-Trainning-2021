@@ -17,7 +17,6 @@
 #define cntBit(n) __builtin_popcountll(n)
 #define sqr(x) ((x)*(x))
 #define endl '\n'
-// #define int long long
 using namespace std;
 
 template<class T> T Abs(const T &x) { return (x < 0 ? -x : x); }
@@ -49,48 +48,10 @@ using ld = long double;
 ( •_•)
 / >?? */
 
-const int MAX_LEN = 502;
+const int MAX = 502, INF = 1e9;
 string A, B, C;
-int sz_A, sz_B;
 string ans = "";
-
-bool x[30];
-int n;
-
-bool isSubStr(const string &S, const string &T) {
-    int pos = 0;
-    REP(i, sz(T)) {
-        int p = S.find(T[i], pos);
-        if (p == string::npos) return false;
-        else pos = p + 1;
-    }
-    return true;
-}
-
-void Try(const int &id) {
-    if (id > n) {
-
-        string S = "";
-        FOR(i, 1, sz_A) if (x[i]) S += A[i - 1];
-        FOR(i, sz_A+1, n) if (x[i]) S += B[i - sz_A - 1];
-
-        bool check = bool(isSubStr(S, A) && isSubStr(S, B) && !isSubStr(S, C));
-
-        if (!check) {
-            S = "";
-            FOR(i, sz_A+1, n) if (x[i]) S += B[i - sz_A - 1];
-            FOR(i, 1, sz_A) if (x[i]) S += A[i - 1];
-            check = bool(isSubStr(S, A) && isSubStr(S, B) && !isSubStr(S, C));
-        }
-
-        if (check) if (ans.empty() || ans.size() > S.size()) ans = S;
-        return;
-    }
-    REP(j,2) {
-        x[id] = j;
-        Try(id + 1);
-    }
-}
+int f[MAX][MAX][MAX];
 
 #define FILE_IO
 signed main(void) {
@@ -100,28 +61,42 @@ signed main(void) {
     freopen("XCKLT.OUT","w",stdout);
     #endif
     cin >> A >> B >> C;
-    sz_A = A.size();
-    sz_B = B.size();
+    int m = A.size();
+    int n = B.size();
+    int p = C.size();
+    A = '*' + A + '*';
+    B = '*' + B + '*';
+    C = '*' + C + '*';
 
-    #define subtask_1_2 (sz_A + sz_B <= 20 && sz(C) <= 10)
+    memset(f, 0x3f, sizeof f);
+    f[0][0][0] = 0;
 
-    if (subtask_1_2) {
-        n = sz_A + sz_B;
-        Try(1);
-        if (ans.empty()) cout << "TRETRAU";
-        else {
-            cout << sz(ans) << endl;
-            cout << ans;
+    FOR(i,0,m) FOR(j,0,n) FOR(k,0,p) if (f[i][j][k] < INF) {
+        REP(t, 2) {
+            char tmp = (t ? A[i+1] : B[j+1]);
+            if (tmp == '*') continue;
+
+            int newI = (tmp == A[i+1] ? i + 1 : i);
+            int newJ = (tmp == B[j+1] ? j + 1 : j);
+            int newK = (tmp == C[k+1] ? k + 1 : k);
+            if (newK < p) {
+                if (minimize(f[newI][newJ][newK], f[i][j][k] + 1)) {
+
+                }
+            }
         }
+    }
+
+    int res = *min_element(f[m][n], f[m][n] + p);
+    if (res > INF) {
+        cout << "TRETRAU";
         exit(0);
     }
 
-    cout << "TRETRAU";
-    // if (ans.empty()) cout << "TRETRAU";
-    // else {
-    //     cout << sz(ans) << endl;
-    //     cout << ans;
-    // }
+    
+
+    cout << res << endl;
+    cout << ans;
 
     return 0;
 }
