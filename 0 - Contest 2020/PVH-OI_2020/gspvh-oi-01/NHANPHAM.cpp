@@ -75,11 +75,8 @@ int calc(const int &n) {
     if (n & 1) return ((n + 1) >> 1) * n;
     return (n >> 1) * (n + 1);
 }
-int cost(const int &d) {
-    if (d <= n) return psum[d-1];
-    int x = psum[n-1] * (d / n);
-    if (d % n) return x + psum[(d % n) - 1];
-    return x;
+int f(const int &x) {
+    return calc(x) - (psum[n] * (x / n) + psum[x % n]);
 }
 
 #define FILE_IO
@@ -90,46 +87,39 @@ signed main(void) {
     freopen("NHANPHAM.OUT","w",stdout);
     #endif
     Read(n); Read(k);
-    REP(i,n) Read(a[i]);
+    FOR(i,1,n) {
+        Read(a[i]);
+        psum[i] = psum[i-1] + a[i];
+    }
 
-    #define subtask_1 (n == 1 && k == 0)
-    #define subtask_2 (n == 1)
-    #define subtask_3 (*max_element(a, a + n) <= 1000000)
-
-    if (subtask_1) {
-        ll res = a[0] * 2LL - 1;
-        Write(res);
+    if (f(1) >= k) {
+        putchar('1');
         exit(0);
     }
 
-    if (subtask_2) {
-        ll x = a[0] * 2LL - 1;
-        int res = -1;
-        int lo = x + 1, hi = 3e9, mi;
+    int N_ITER = 100;
+    int lo = 1, hi = 3e9 / n;
+    REP(i, N_ITER) {
+        int x1 = lo + (hi - lo) / 3;
+        int x2 = hi - (hi - lo) / 3;
+        if (f(1 + x1 * n) < f(1 + x2 * n)) hi = x2;
+        else lo = x1;
+    }
+    
+    int res = -1;
+    int x = 1 + lo * n;
+    if (f(x) <= k) {
+        lo = x; hi = 3e9;
         while (lo <= hi) {
-            mi = lo + ((hi - lo) >> 1);
-            if (calc(mi) - 1LL * mi * a[0] >= k) {
+            int mi = lo + ((hi - lo) >> 1);
+            if (f(mi) >= k) {
                 res = mi;
                 hi = mi - 1;
             } else lo = mi + 1;
         }
-        Write(res);
-        exit(0);
-    }
-
-    psum[0] = a[0];
-    FOR(i,1,n-1) psum[i] = a[i] + psum[i-1];
-
-    int res = -1;
-    int lo = 1, hi = 3e9, mi;
-    while (lo <= hi) {
-        mi = lo + ((hi - lo) >> 1);
-        if (calc(mi) - cost(mi) >= k) {
-            res = mi;
-            hi = mi - 1;
-        } else lo = mi + 1;
     }
 
     Write(res);
+
     return 0;
 }
