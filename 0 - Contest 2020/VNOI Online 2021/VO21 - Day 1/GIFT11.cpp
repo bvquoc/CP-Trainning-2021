@@ -139,8 +139,7 @@ signed main(void) {
         
         if (subtask_2) doSub2(T[id]);
         else {
-            putchar('-');
-            putchar('1');
+            putchar('0');
             putchar(endl);
         }
     }
