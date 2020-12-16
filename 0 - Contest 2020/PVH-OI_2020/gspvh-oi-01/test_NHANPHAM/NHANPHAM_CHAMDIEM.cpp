@@ -8,7 +8,7 @@ using namespace std;
 #define ll long long
 
 const string FNAME = "NHANPHAM"; // Ten chuong trinh
-const ll N_TEST = 50; // So luong test case can kiem tra
+const ll N_TEST = 100; // So luong test case can kiem tra
 
 ll mrand(ll, ll); // Sinh so ngau nhien trong doan [a, b]
 string i2s(ll); // Convert tu integer -> string
@@ -22,10 +22,12 @@ string i2s(ll); // Convert tu integer -> string
 void generateTestCase(string f_inp) {
 	ofstream inp(f_inp.c_str());
 	
-	ll n = 1, k = mrand(0, 1e18), x;
+	ll n = mrand(1, 100), k = mrand(0, 1e18), x;
 	inp << n << ' ' << k << '\n';
-	x = mrand(1, 1e9);
-	inp << x;
+	while (n--) {
+		x = mrand(1, 1e5);
+		inp << x << ' ';
+	}
 	inp.close();
 }
 

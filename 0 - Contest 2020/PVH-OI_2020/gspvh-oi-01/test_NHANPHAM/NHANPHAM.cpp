@@ -68,14 +68,16 @@ using ld = long double;
 ( •_•)
 / >?? */
 
-const int N = 100005, INF = 2e18 + 7;
-int n, k, a[N];
+const int N = 100005, INF = LLONG_MAX;
+int n, k, a[N], psum[N];
 
 int calc(const int &n) {
     if (n & 1) return ((n + 1) >> 1) * n;
     return (n >> 1) * (n + 1);
 }
-
+int f(const int &x) {
+    return calc(x) - (psum[n] * (x / n) + psum[x % n]);
+}
 
 signed main(int argc, char *argv[]) {
 	if (argc >= 3) {
@@ -83,30 +85,39 @@ signed main(int argc, char *argv[]) {
 		freopen(argv[2], "w", stdout);
 	}
     Read(n); Read(k);
-    REP(i,n) Read(a[i]);
+    FOR(i,1,n) {
+        Read(a[i]);
+        psum[i] = psum[i-1] + a[i];
+    }
 
-	#define subtask_1 (n == 1 && k == 0)
-    #define subtask_2 (n == 1)
-
-    if (subtask_1) {
-        ll res = a[0] * 2LL - 1;
-        Write(res);
+    if (f(1) >= k) {
+        putchar('1');
         exit(0);
     }
 
-    if (subtask_2) {
-        ll x = a[0] * 2LL - 1;
-        int res = -1;
-        int lo = x + 1, hi = 2e9, mi;
+    int N_ITER = 100;
+    int lo = 1, hi = 3e9 / n;
+    REP(i, N_ITER) {
+        int x1 = lo + (hi - lo) / 3;
+        int x2 = hi - (hi - lo) / 3;
+        if (f(1 + x1 * n) < f(1 + x2 * n)) hi = x2;
+        else lo = x1;
+    }
+    
+    int res = -1;
+    int x = 1 + lo * n;
+    if (f(x) <= k) {
+        lo = x; hi = 3e9;
         while (lo <= hi) {
-            mi = lo + ((hi - lo) >> 1);
-            if (calc(mi) - 1LL * mi * a[0] >= k) {
+            int mi = lo + ((hi - lo) >> 1);
+            if (f(mi) >= k) {
                 res = mi;
                 hi = mi - 1;
             } else lo = mi + 1;
         }
-        Write(res);
-        exit(0);
     }
+
+    Write(res);
+
     return 0;
 }
