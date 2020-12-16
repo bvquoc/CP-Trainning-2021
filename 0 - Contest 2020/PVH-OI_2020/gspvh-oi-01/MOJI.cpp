@@ -6,8 +6,8 @@
 #define FOR(i, a, b) for(int i=(a); i<=(b); i++)
 #define FORD(i, a, b) for(int i=(a); i>=(b); i--)
 #define REP(i, n) for(int i=0, _n=(n); i<_n; i++)
-#define FORE(i, rootB) for (__typeof((rootB).begin()) i = (rootB).begin(); i != (rootB).end(); ++i)
-#define ALL(rootB) (rootB).begin(), (rootB).end()
+#define FORE(i, v) for (__typeof((v).begin()) i = (v).begin(); i != (v).end(); ++i)
+#define ALL(v) (v).begin(), (v).end()
 #define sz(a) (int(a.size()))
 #define BIT(a, i) (((a) >> (i)) & 1LL)
 #define MASK(i) (1LL << (i))
@@ -71,12 +71,10 @@ using ld = long double;
 struct Edge { int u, v, w, id; };
 struct DisjoinSet {
     int n; vector <int> par, height;
-    vector <bool> haveStore;
     void assign(int sz) {
         n = sz;
         par.assign(n+7, 0);
         height.assign(n+7, 0);
-        haveStore.assign(n+7, 0);
         for (int i=1; i<=n; i++) par[i] = i;
     }
     DisjoinSet () { assign(0); }
@@ -91,15 +89,6 @@ struct DisjoinSet {
         int rootA = find(A);
         int rootB = find(B);
         if (rootA == rootB) return false;
-        
-        if (haveStore[rootA]) {
-            haveStore[rootB] = true;
-            haveStore[A] = haveStore[B] = true;
-        }
-        if (haveStore[rootB]) {
-            haveStore[rootA] = true;
-            haveStore[A] = haveStore[B] = true;
-        }
 
         if (height[rootA] == height[rootB]) height[rootA]++;
         if (height[rootA] < height[rootB]) par[rootA] = rootB;
@@ -114,78 +103,9 @@ int n, k, m, p, t;
 Edge e1[N], e2[N];
 vector <int> MojiStore;
 
-ll res = LLONG_MAX;
+ll res = 0;
 vector <int> ans1, ans2;
-bool x[20], mark[N], isStore[N];
-vector <int> tplt[N];
-
-bool check() {
-    DSU.assign(n);
-    FOR(i,1,n) {
-        mark[i] = false;
-        tplt[i].clear();
-    }
-
-    signed u, v;
-    FOR(i,1,m) if (x[i]) {
-        u = e1[i].u, v = e1[i].v;
-        if (DSU.join(u, v)) {
-            mark[u] = true;
-            mark[v] = true;
-        } else return false;
-    }
-    FOR(i,m+1,m+p) if (!x[i]) {
-        u = e2[i-m].u, v = e2[i-m].v; 
-        if (DSU.join(u, v)) {
-            mark[u] = true;
-            mark[v] = true;
-        } else return false;
-    }
-
-    FOR(i,1,n) {
-        if (!mark[i]) return false;
-        tplt[DSU.find(i)].emplace_back(i);
-    }
-
-    int sz = 0;
-    FOR(i,1,n) {
-        if (tplt[i].empty()) continue;
-        sz++;
-        int cnt = 0;
-        for (int x: tplt[i]) if (isStore[x]) cnt++;
-        if (cnt != 1) return false;
-    }
-
-    return (sz > 0);
-}
-
-void Try(int i) {
-    if (i > m + p) {
-        int cnt = 0;
-        FOR(j,1,m) if (x[j]) cnt++;
-        FOR(j,m+1,m+p) if (!x[j]) cnt++;
-        if (cnt > (n-1)) return;
-
-        cnt = 0;
-        FOR(j,1,m) if (!x[j]) cnt += t * e1[j].w;
-        FOR(j,m+1,m+p) if (!x[j]) cnt += t * e2[j-m].w;
-        // cout << cnt << endl;
-
-        if (cnt > res) return;
-
-        if (check() && minimize(res, cnt)) {
-            ans1.clear(); ans2.clear();
-            FOR(j,1,m) if (!x[j]) ans1.emplace_back(j);
-            FOR(j,m+1,m+p) if (!x[j]) ans2.emplace_back(j-m);
-        }
-
-        return;
-    }
-    REP(j,2) {
-        x[i] = j;
-        Try(i+1);
-    }
-}
+bool isStore[N];
 
 #define FILE_IO
 signed main(void) {
@@ -216,97 +136,45 @@ signed main(void) {
         }
     }
 
-    #define subtask_1 (n <= 17 && m + p <= 17)
-    #define subtask_2 (k == 1 && m == 0)
-    #define subtask_3 (p == 0)
+    DSU.assign(n);
+    REP(i, ll(MojiStore.size()) - 1) DSU.join(MojiStore[i], MojiStore[i+1]);
 
-    if (subtask_2) {
-        sort(e2 + 1, e2 + p + 1, [](const Edge &A, const Edge &B){
-            return (A.w < B.w || (A.w == B.w && A.id < B.id));
-        });
-
-        ll res = 0;
-        vector <int> ans;
-        
-        DSU.assign(n);
-        FOR(i,1,p) {
-            if (DSU.join(e2[i].u, e2[i].v)) {
-                res += t * e2[i].w;
-                ans.emplace_back(e2[i].id);
-            }
-        }
-        sort(ALL(ans));
-
-        Write(res); putchar(endl);
-        putchar('0'); putchar(endl); putchar(endl);
-        Write(ans.size()); putchar(endl);
-        for (int x: ans) {
-            Write(x);
-            putchar(' ');
-        }
-        exit(0);
-    }
-    
-    if (subtask_1) {
-        Try(1);
-        sort(ALL(ans1)); sort(ALL(ans2));
-
-        Write(res); putchar(endl);
-        Write(ans1.size()); putchar(endl);
-        for (int x: ans1) {
-            Write(x);
-            putchar(' ');
-        }
-        putchar(endl);
-        Write(ans2.size()); putchar(endl);
-        for (int x: ans2) {
-            Write(x);
-            putchar(' ');
-        }
-        exit(0);
-    }
-
-    if (subtask_3) {
-        sort(e1 + 1, e1 + m + 1, [](const Edge &A, const Edge &B) {
-            if ((isStore[B.u] || isStore[B.v]) && (isStore[A.u] || isStore[A.v])) return (A.w > B.w || (A.w == B.w && A.id > B.id));
-            if (isStore[A.u] || isStore[A.v]) return true;
-            if (isStore[B.u] || isStore[B.v]) return false;
-            return (A.w > B.w || (A.w == B.w && A.id > B.id));
-        });
-
-        DSU.assign(n);
-        for (int x: MojiStore) DSU.haveStore[x] = true;
-
-        FOR(i,1,m) {
-            signed u = e1[i].u, v = e1[i].w;
-            signed r_u = DSU.find(u), r_v = DSU.find(v);
-            if (r_u == r_v) continue;
-            if (DSU.haveStore[r_u] && DSU.haveStore[r_v]) continue;
-
-            DSU.join(u, v);
-            mark[i] = true;
-        }
-
-        res = 0;
-        FOR(i,1,m) if (!mark[i]) {
-            ans1.emplace_back(e1[i].id);
+    sort(e1 + 1, e1 + 1 + m, [](const Edge &A, const Edge &B) {
+        return A.w > B.w || (A.w == B.w && A.id > B.id);
+    });
+    FOR(i,1,m) {
+        int u = e1[i].u, v = e1[i].v;
+        if (!DSU.join(u, v)) {
             res += e1[i].w * t;
+            ans1.emplace_back(e1[i].id);
         }
+    }
 
-        sort(ALL(ans1));
+    sort(e2 + 1, e2 + 1 + p, [](const Edge &A, const Edge &B) {
+        return A.w < B.w || (A.w == B.w && A.id < B.id);
+    });
+    FOR(i,1,p) {
+        int u = e2[i].u, v = e2[i].v;
+        if (DSU.join(u, v)) {
+            res += e2[i].w * t;
+            ans2.emplace_back(e2[i].id);
+        }
+    }
 
-        Write(res); putchar(endl);
-        Write(ans1.size()); putchar(endl);
-        for (int x: ans1) {
-            Write(x);
-            putchar(' ');
-        }
-        putchar(endl);
-        Write(ans2.size()); putchar(endl);
-        for (int x: ans2) {
-            Write(x);
-            putchar(' ');
-        }
+    sort(ALL(ans1));
+    sort(ALL(ans2));
+
+    Write(res); putchar(endl);
+    Write(ans1.size()); putchar(endl);
+    for (int x: ans1) {
+        Write(x);
+        putchar(' ');
+    }
+    putchar(endl);
+    Write(ans2.size()); putchar(endl);
+    for (int x: ans2) {
+        Write(x);
+        putchar(' ');
     }
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
