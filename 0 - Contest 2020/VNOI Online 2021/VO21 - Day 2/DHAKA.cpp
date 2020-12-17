@@ -70,7 +70,6 @@ using ld = long double;
 const int N = 100005, INF = 2e18;
 int n, m, k, l, f[N];
 vector <int> s[N];
-struct Edge { int u, v, w; } e[N];
 vector <ii> adj[N];
 
 int g[N][64];
@@ -95,9 +94,10 @@ signed main(void) {
         }
     }
     FOR(i,1,m) {
-        Read(e[i].u); Read(e[i].v); Read(e[i].w);
-        adj[e[i].u].push_back(ii(e[i].v, e[i].w));
-        adj[e[i].v].push_back(ii(e[i].u, e[i].w));
+        int u, v, w;
+        Read(u); Read(v); Read(w);
+        adj[u].push_back(ii(v, w));
+        adj[v].push_back(ii(u, w));
     }
 
     if (l == 0) {
