@@ -76,6 +76,7 @@ Edge e[M];
 vector <int> adj[N];
 int ans[M];
 
+vector <int> idEdges;
 void dijkstra(const int &st, int d[]){
     priority_queue <ii, vector<ii>, greater<ii> > pq;
 
@@ -92,34 +93,29 @@ void dijkstra(const int &st, int d[]){
 
         for (int i: adj[u]) {
             int v = e[i].v, uv = e[i].w;
-            if (minimize(d[v], du + uv)) pq.push(ii(d[v], v));
+            if (minimize(d[v], du + uv)) {
+                pq.push(ii(d[v], v));
+                idEdges.push_back(i);
+            }
         }
     }
 }
 
-bool mark[N];
-ii trace[N];
+vector <int> ke[N];
+int f[N], g[N];
 
-void get_path(int x) {
-    while (trace[x] != ii(-1, -1)) {
-        ans[trace[x].second]++;
-        if (ans[trace[x].second] >= MOD) ans[trace[x].second] -= MOD;
-        x = trace[x].first;
-    }
+int calc_g(int u) {
+    if (ke[u].empty()) return g[u] = 1;
+    g[u] = 1;
+    for (int i: ke[u]) g[u] += calc_g(e[i].v);
+    return g[u];
 }
-
-int root;
-void dfs(const int &u, const int &d) {
-    for (int i: adj[u]) if (!mark[e[i].v]) {
-        int v = e[i].v;
-
-        mark[v] = true;
-        trace[v] = ii(u, i);
-        if (d + e[i].w == min_path[root][v]) get_path(v);
-        dfs(v, d + e[i].w);
-        trace[v] = ii(-1,-1);
-        mark[v] = false;
+int calc_f(int u) {
+    for (int i: ke[u]) {
+        f[e[i].v] += f[u];
+        calc_f(e[i].v);
     }
+    return f[u];
 }
 
 #define FILE_IO
@@ -139,13 +135,23 @@ signed main(void) {
         adj[u].push_back(i);
     }
 
-    FOR(i,1,n) dijkstra(i, min_path[i]);
+    FOR(u,1,n) {
+        idEdges.clear();
+        dijkstra(u, min_path[u]);
+        FOR(i,1,n) {
+            ke[i].clear();
+            f[i] = g[i] = 0;
+        }
 
-    FOR(i,1,n) {
-        FOR(j,1,n) mark[j] = false;
-        FOR(j,1,n) trace[j] = ii(-1, -1);
-        root = i;
-        dfs(i, 0);
+        for (int i: idEdges) ke[e[i].u].push_back(i);
+        f[u] = 1;
+        calc_f(u);
+        calc_g(u);
+
+        cout << u << ": \n";
+        FOR(i,1,n) cout << f[i] << ' ' << g[i] << endl;
+        cout << endl;
+        for (int i: idEdges) (ans[i] += 1LL * f[e[i].u] * g[e[i].v]) % MOD;
     }
 
     FOR(i,1,m) {
