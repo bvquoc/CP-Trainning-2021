@@ -68,7 +68,7 @@ using ld = long double;
 / >?? */
 
 const int N = 100005, INF = 2e18;
-int n, m, k, l, d[N], f[N];
+int n, m, k, l, f[N];
 vector <int> s[N];
 struct Edge { int u, v, w; } e[N];
 vector <ii> adj[N];
@@ -103,64 +103,15 @@ signed main(void) {
     if (l == 0) {
         priority_queue <ii, vector<ii>, greater<ii> > pq;
 
-        for (int i=1; i<=n; i++) d[i] = INF;
-        d[1] = 0; pq.push(ii(0, 1));
+        for (int i=1; i<=n; i++) f[i] = INF;
+        f[1] = 0; pq.push(ii(0, 1));
 
         while (pq.size()) {
             int u = pq.top().second, du = pq.top().first; pq.pop();
-            if (du != d[u]) continue;
+            if (du != f[u]) continue;
             for (ii e: adj[u]) {
                 int v = e.first, uv = e.second;
-                if (minimize(d[v], du + uv)) pq.push(ii(d[v], v));
-            }
-        }
-
-        if (d[n] == INF) d[n] = -1;
-        Write(d[n]);
-        exit(0);
-    }
-
-    if (k == 1) { // Subtask 3
-        struct State {
-            int u, w; bool ok;
-            State (int _u = 0, int _w = INF, bool _ok = 0) {
-                u = _u; w = _w; ok = _ok;
-            }
-            bool operator< (const State& other) const { return w > other.w || (w == other.w && ok < other.ok); }
-        };
-
-        priority_queue <State> pq;
-        for (int i=1; i<=n; i++) {
-            d[i] = INF;
-            f[i] = INF;
-        }
-
-        d[1] = 0; pq.push(State(1, 0, 0));
-        if (s[1][0]) {
-            f[1] = 0;
-            pq.push(State(1, 0, 1));
-        }
-
-        while (pq.size()) {
-            int u = pq.top().u, du = pq.top().w; 
-            bool ok = pq.top().ok; pq.pop();
-
-            if (!ok) {
-                if (du != d[u]) continue;
-                for (ii e: adj[u]) {
-                    int v = e.first, uv = e.second;
-                    if (s[v][0]) {
-                        if (minimize(f[v], du + uv)) pq.push(State(v, f[v], 1));
-                    } else {
-                        if (minimize(d[v], du + uv)) pq.push(State(v, d[v], 0));
-                    }
-                }
-            } else {
-                if (du != f[u]) continue;
-                for (ii e: adj[u]) {
-                    int v = e.first, uv = e.second;
-                    if (minimize(f[v], du + uv)) pq.push(State(v, f[v], ok));
-                }
+                if (minimize(f[v], du + uv)) pq.push(ii(f[v], v));
             }
         }
 
@@ -198,6 +149,56 @@ signed main(void) {
     REP(j, 64) if (cntBit(j) >= l && g[n][j] < INF) minimize(res, g[n][j]);
     if (res == INF) res = -1;
     Write(res);
-    
+
     return 0;
 }
+
+
+// if (k == 1) { // Subtask 3
+//         struct State {
+//             int u, w; bool ok;
+//             State (int _u = 0, int _w = INF, bool _ok = 0) {
+//                 u = _u; w = _w; ok = _ok;
+//             }
+//             bool operator< (const State& other) const { return w > other.w || (w == other.w && ok < other.ok); }
+//         };
+
+//         priority_queue <State> pq;
+//         for (int i=1; i<=n; i++) {
+//             d[i] = INF;
+//             f[i] = INF;
+//         }
+
+//         d[1] = 0; pq.push(State(1, 0, 0));
+//         if (s[1][0]) {
+//             f[1] = 0;
+//             pq.push(State(1, 0, 1));
+//         }
+
+//         while (pq.size()) {
+//             int u = pq.top().u, du = pq.top().w; 
+//             bool ok = pq.top().ok; pq.pop();
+
+//             if (!ok) {
+//                 if (du != d[u]) continue;
+//                 for (ii e: adj[u]) {
+//                     int v = e.first, uv = e.second;
+//                     if (s[v][0]) {
+//                         if (minimize(f[v], du + uv)) pq.push(State(v, f[v], 1));
+//                     } else {
+//                         if (minimize(d[v], du + uv)) pq.push(State(v, d[v], 0));
+//                     }
+//                 }
+//             } else {
+//                 if (du != f[u]) continue;
+//                 for (ii e: adj[u]) {
+//                     int v = e.first, uv = e.second;
+//                     if (minimize(f[v], du + uv)) pq.push(State(v, f[v], ok));
+//                 }
+//             }
+//         }
+
+//         if (f[n] == INF) f[n] = -1;
+//         Write(f[n]);
+//         exit(0);
+//     }
