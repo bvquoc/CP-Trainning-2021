@@ -59,6 +59,8 @@ int sum(const int &l, const int &r) {
     return psum[r] - psum[l-1];
 }
 
+vector <int> adj[N];
+
 #define FILE_IO
 signed main(void) {
     FastIO;
@@ -69,7 +71,14 @@ signed main(void) {
     
     cin >> n >> m >> k;
     cin >> S;
-    FOR(i,1,m) cin >> e[i].first >> e[i].second;
+    FOR(i,1,m) {
+        int u, v; 
+        cin >> u >> v;
+        u--; v--;
+        e[i] = {u, v};
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
 
     if (m == 0 && k == 0) {
         int res = 0; ii ans;
@@ -109,6 +118,30 @@ signed main(void) {
         exit(0);
     }
 
+
+    REP(i,n) {
+        for (int j: adj[i]) {
+            string tmp = S;
+            swap(tmp[i], tmp[j]);
+            if (S < tmp) S = tmp;
+        }
+    }
+
+    int res = 0; ii ans;
+    FOR(i,1,n) psum[i] = psum[i-1] + (S[i-1] - '0');
+    FOR(l,1,n) {
+        int lo = l, hi = n, mi;
+        while (lo <= hi) {
+            mi = lo + ((hi - lo) >> 1);
+            if (sum(l, mi) + k >= mi - l + 1) {
+                if (maximize(res, mi - l + 1)) ans = ii(l, mi);
+                lo = mi + 1;
+            } else hi = mi - 1;
+        }
+    }
+
+    if (res == 0) cout << "-1";
+    else cout << ans.first << ' ' << ans.second;
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
