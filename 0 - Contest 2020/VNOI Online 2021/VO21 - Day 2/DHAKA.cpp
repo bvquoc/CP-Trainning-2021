@@ -67,12 +67,20 @@ using ld = long double;
 ( •_•)
 / >?? */
 
-const int N = 100005, INF = 2e18;
+const int N = 100005, INF = 1e18;
 int n, m, k, l, f[N];
-vector <int> s[N];
 vector <ii> adj[N];
-
 int g[N][64];
+
+struct State {
+    int u, w, mask;
+    State (int _u = 0, int _w = INF, int _mask = 0) {
+        u = _u; w = _w; mask = _mask;
+    }
+    bool operator< (const State& other) const { 
+        return w > other.w || (w == other.w && cntBit(mask) < cntBit(other.mask)); 
+    }
+};
 
 #define FILE_IO
 signed main(void) {
@@ -84,12 +92,10 @@ signed main(void) {
     
     Read(n); Read(m); Read(k); Read(l);
     FOR(i, 1, n) {
-        int x; Read(x);
-        s[i].push_back(x);
+        int x, d; Read(d);
         f[i] = 0;
-        REP(j, s[i][0]) {
+        REP(j, d) {
             Read(x);
-            s[i].push_back(x);
             f[i] = turnON(f[i], x-1);
         }
     }
@@ -120,13 +126,6 @@ signed main(void) {
         exit(0);
     }
 
-    struct State {
-        int u, w, mask;
-        State (int _u = 0, int _w = INF, int _mask = 0) {
-            u = _u; w = _w; mask = _mask;
-        }
-        bool operator< (const State& other) const { return w > other.w || (w == other.w && cntBit(mask) < cntBit(other.mask)); }
-    };
 
     priority_queue <State> pq;
     for (int i=1; i<=n; i++) REP(j, 64) g[i][j] = INF;
@@ -140,65 +139,16 @@ signed main(void) {
 
         for (ii e: adj[u]) {
             int v = e.first, uv = e.second;
-            if (minimize(g[v][mask | f[v]], du + uv)) pq.push(State(v, g[v][mask | f[v]], mask | f[v]));
+            int newMask = mask | f[v];
+            if (minimize(g[v][newMask], du + uv)) pq.push(State(v, g[v][newMask], newMask));
         }
 
     }
 
     int res = INF;
-    REP(j, 64) if (cntBit(j) >= l && g[n][j] < INF) minimize(res, g[n][j]);
+    REP(mask, 64) if (cntBit(mask) >= l && g[n][mask] < INF) minimize(res, g[n][mask]);
     if (res == INF) res = -1;
     Write(res);
 
     return 0;
 }
-
-
-// if (k == 1) { // Subtask 3
-//         struct State {
-//             int u, w; bool ok;
-//             State (int _u = 0, int _w = INF, bool _ok = 0) {
-//                 u = _u; w = _w; ok = _ok;
-//             }
-//             bool operator< (const State& other) const { return w > other.w || (w == other.w && ok < other.ok); }
-//         };
-
-//         priority_queue <State> pq;
-//         for (int i=1; i<=n; i++) {
-//             d[i] = INF;
-//             f[i] = INF;
-//         }
-
-//         d[1] = 0; pq.push(State(1, 0, 0));
-//         if (s[1][0]) {
-//             f[1] = 0;
-//             pq.push(State(1, 0, 1));
-//         }
-
-//         while (pq.size()) {
-//             int u = pq.top().u, du = pq.top().w; 
-//             bool ok = pq.top().ok; pq.pop();
-
-//             if (!ok) {
-//                 if (du != d[u]) continue;
-//                 for (ii e: adj[u]) {
-//                     int v = e.first, uv = e.second;
-//                     if (s[v][0]) {
-//                         if (minimize(f[v], du + uv)) pq.push(State(v, f[v], 1));
-//                     } else {
-//                         if (minimize(d[v], du + uv)) pq.push(State(v, d[v], 0));
-//                     }
-//                 }
-//             } else {
-//                 if (du != f[u]) continue;
-//                 for (ii e: adj[u]) {
-//                     int v = e.first, uv = e.second;
-//                     if (minimize(f[v], du + uv)) pq.push(State(v, f[v], ok));
-//                 }
-//             }
-//         }
-
-//         if (f[n] == INF) f[n] = -1;
-//         Write(f[n]);
-//         exit(0);
-//     }
