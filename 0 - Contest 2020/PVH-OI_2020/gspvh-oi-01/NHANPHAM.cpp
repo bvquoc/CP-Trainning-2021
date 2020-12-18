@@ -129,7 +129,13 @@ signed main(void) {
     }
     
     int res = -1;
+
     int x = 1 + lo * n;
+
+    for (int st = 0, i = x; st <= n; st++, i--) {
+        if (f(i) >= k) res = i;
+    }
+
     if (f(x) <= k) {
         lo = x; hi = 3e9;
         while (lo <= hi) {
