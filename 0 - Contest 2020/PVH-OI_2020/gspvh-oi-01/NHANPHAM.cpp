@@ -132,10 +132,6 @@ signed main(void) {
 
     int x = 1 + lo * n;
 
-    for (int st = 0, i = x; st <= n; st++, i--) {
-        if (f(i) >= k) res = i;
-    }
-
     if (f(x) <= k) {
         lo = x; hi = 3e9;
         while (lo <= hi) {
@@ -145,6 +141,10 @@ signed main(void) {
                 hi = mi - 1;
             } else lo = mi + 1;
         }
+    }
+
+    for (int st = 0, i = x; st <= n; st++, i--) {
+        if (f(i) >= k) res = i;
     }
 
     Write(res);
