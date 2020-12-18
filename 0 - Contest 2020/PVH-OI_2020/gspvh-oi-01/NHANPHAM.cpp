@@ -92,12 +92,34 @@ signed main(void) {
         psum[i] = psum[i-1] + a[i];
     }
 
-    if (f(1) >= k) {
-        putchar('1');
+    #define subtask_1 (n == 1 && k == 0)
+    #define subtask_2 (n == 1)
+    if (subtask_1) {
+        ll res = a[1] * 2LL - 1;
+        Write(res);
         exit(0);
     }
 
-    int N_ITER = 100;
+    if (subtask_2) {
+        int res = -1;
+        int lo = a[1] * 2LL - 1, hi = 3e9, mi;
+        while (lo <= hi) {
+            mi = lo + ((hi - lo) >> 1);
+            if (f(mi) >= k) {
+                res = mi;
+                hi = mi - 1;
+            } else lo = mi + 1;
+        }
+        Write(res);
+        exit(0);
+    }
+
+    FOR(i,1,n) if (f(i) >= k) {
+        Write(i);
+        exit(0);
+    }
+
+    int N_ITER = 1000;
     int lo = 1, hi = 3e9 / n;
     REP(i, N_ITER) {
         int x1 = lo + (hi - lo) / 3;
