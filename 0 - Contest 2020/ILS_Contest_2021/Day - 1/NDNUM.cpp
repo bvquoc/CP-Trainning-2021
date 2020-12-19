@@ -17,7 +17,7 @@
 #define cntBit(n) __builtin_popcountll(n)
 #define sqr(x) ((x)*(x))
 #define endl '\n'
-// #define int long long
+#define int long long
 using namespace std;
 
 template <typename T>
@@ -68,7 +68,8 @@ using ld = long double;
 ( •_•)
 / >?? */
 
-const int ans[] = { 0, 10, 23, 105, 614, 3826, 25373, 177247, 1288440 };
+const int MAX_ANS = 10;
+const int ans[] = { 0, 10, 23, 105, 614, 3826, 25373, 177247, 1288440, 9679469, 74720569 };
 const int MOD = 999999937;
 int n;
 
@@ -81,7 +82,8 @@ signed main(void) {
     #endif
     
     Read(n);
-    
+    if (n > MAX_ANS) exit(0);
+
     ll res = 0;
     FOR(i,1,n) res = ((ll) res + ans[i]) % MOD;
 
