@@ -89,6 +89,5 @@ signed main(void) {
 
     Write(res);
 
-    // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
     return 0;
 }
