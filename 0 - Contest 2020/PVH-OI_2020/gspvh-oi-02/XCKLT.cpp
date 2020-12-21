@@ -3,16 +3,16 @@
 #define FastIO ios::sync_with_stdio(0); cin.tie(nullptr); cout.tie(nullptr);
 #define fi first
 #define se second
-#define FOR(i, a, b) for(int i=(a); i<=(b); i++)
-#define FORD(i, a, b) for(int i=(a); i>=(b); i--)
+#define FOR(i, A, B) for(int i=(A); i<=(B); i++)
+#define FORD(i, A, B) for(int i=(A); i>=(B); i--)
 #define REP(i, n) for(int i=0, _n=(n); i<_n; i++)
 #define FORE(i, v) for (__typeof((v).begin()) i = (v).begin(); i != (v).end(); ++i)
 #define ALL(v) (v).begin(), (v).end()
-#define sz(a) (int(a.size()))
-#define BIT(a, i) (((a) >> (i)) & 1LL)
+#define sz(A) (int(A.size()))
+#define BIT(A, i) (((A) >> (i)) & 1LL)
 #define MASK(i) (1LL << (i))
-#define turnON(a, i) ((a) | MASK(i))
-#define turnOFF(a, i) ((a) & (~MASK(i)))
+#define turnON(A, i) ((A) | MASK(i))
+#define turnOFF(A, i) ((A) & (~MASK(i)))
 #define flipBit(n, bit) ((n) ^ (1LL << (bit)))
 #define cntBit(n) __builtin_popcountll(n)
 #define sqr(x) ((x)*(x))
@@ -50,14 +50,39 @@ using ld = long double;
 
 const int MAX = 502, INF = 1e9;
 string A, B, C;
-string ans = "";
+int n, m, p;
 
 int f[MAX][MAX][MAX];
-short trace_i[MAX][MAX][MAX];
-short trace_j[MAX][MAX][MAX];
-short trace_k[MAX][MAX][MAX];
-char trace_x[MAX][MAX][MAX];
 
+int dp(int i, int j, int k) {
+    if (k == p) return INF;
+    if (i >= m && j >= n) return 0;
+    if (i > m || j > n) return INF;
+    if (f[i][j][k] != -1) return f[i][j][k];
+    
+    int &res = f[i][j][k];
+    res = INF;
+    minimize(res, min({ dp(i + 1, j, k + (A[i] == C[k])) + 1, dp(i + (A[i] == B[j]), j + 1, k + (B[j] == C[k])) + 1}));
+    return res;
+}
+void trace(int i, int j, int k) {
+    if (i >= m && j >= n) return;
+    if (dp(i, j, k)==dp(i+1, j, k+(A[i]==C[k]))+1) {
+        cout << A[i];
+        trace(i + 1, j, k + (A[i] == C[k]));
+        return;
+    }
+    if (dp(i, j, k) == dp(i, j+1, k+(B[j]==C[k]))+1) {
+        cout << B[j];
+        trace(i, j + 1, k + (B[j] == C[k]));
+        return;
+    }
+    if (A[i] == B[j] && dp(i, j, k) == dp(i+1, j+1, k+(A[i]==C[k])) + 1) {
+        cout << A[i];
+        trace(i + 1, j + 1, k + (A[i] == C[k]));
+        return;
+    }
+}
 
 #define FILE_IO
 signed main(void) {
@@ -67,58 +92,20 @@ signed main(void) {
     freopen("XCKLT.OUT","w",stdout);
     #endif
     cin >> A >> B >> C;
-    int m = A.size();
-    int n = B.size();
-    int p = C.size();
-    A = '*' + A + '*';
-    B = '*' + B + '*';
-    C = '*' + C + '*';
+    m = A.size();
+    n = B.size();
+    p = C.size();
 
-    memset(f, 0x3f, sizeof f);
-    f[0][0][0] = 0;
+    FOR(i,0,m) FOR(j,0,n) FOR(k,0,p) f[i][j][k] = -1;
 
-    FOR(i,0,m) FOR(j,0,n) FOR(k,0,p) if (f[i][j][k] < INF) {
-        REP(t, 2) {
-            char tmp = (t ? A[i+1] : B[j+1]);
-            if (tmp == '*') continue;
-
-            int newI = (tmp == A[i+1] ? i + 1 : i);
-            int newJ = (tmp == B[j+1] ? j + 1 : j);
-            int newK = (tmp == C[k+1] ? k + 1 : k);
-            if (newK < p) {
-                if (minimize(f[newI][newJ][newK], f[i][j][k] + 1)) {
-                    trace_i[newI][newJ][newK] = i;
-                    trace_j[newI][newJ][newK] = j;
-                    trace_k[newI][newJ][newK] = k;
-                    trace_x[newI][newJ][newK] = tmp;
-                }
-            }
-        }
-    }
-
-    int res = *min_element(f[m][n], f[m][n] + p);
-    if (res > INF) {
+    int res = dp(0, 0, 0);
+    if (res >= INF) {
         cout << "TRETRAU";
         exit(0);
     }
 
-    short I = m, J = n, K;
-    FOR(i, 0, p-1) if (f[m][n][i] == res) K = i;
-
-    while (I != 0 || J != 0) {
-        ans += trace_x[I][J][K];
-        short tmp_i = trace_i[I][J][K];
-        short tmp_j = trace_j[I][J][K];
-        short tmp_k = trace_k[I][J][K];
-        I = tmp_i;
-        J = tmp_j;
-        K = tmp_k;
-    }
-
     cout << res << endl;
-    reverse(ALL(ans));
-    cout << ans;
+    trace(0, 0, 0);
 
-    // cout << "\nTime: " << (double) clock() / 1000.0;
     return 0;
 }
