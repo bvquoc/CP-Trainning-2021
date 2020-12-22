@@ -87,12 +87,12 @@ struct FenwickTree {
 
     int getMin(int r) {
         int res = INF;
-        for (; r >= 1; r = (r & (r + 1)) - 1) res = min(res, bit[r]);
+        for (; r >= 1; r = (r & (r + 1)) - 1) minimize(res, bit[r]);
         return res;
     }
 
     void update(int idx, int val) {
-        for (; idx <= n; idx = idx | (idx + 1)) 
+        for (; idx <= n; idx |= (idx + 1)) 
             bit[idx] = min(bit[idx], val);
     }
 } BIT;
