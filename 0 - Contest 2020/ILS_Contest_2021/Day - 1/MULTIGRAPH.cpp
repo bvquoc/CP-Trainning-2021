@@ -71,27 +71,8 @@ using ld = long double;
 
 const int N = 100005;
 const ll LINF = LLONG_MAX;
-int n, q_sz, a[N];
-iii q[N];
-
-vector <ll> d[N];
-
-void dijkstra(const int &st, vector <ll> &d) {
-    d.assign(n + 1, LINF);
-    d[st] = 0;
-
-    priority_queue <ii, vector<ii>, greater<ii> > pq;
-    pq.push(ii(0, st));
-
-    while (pq.size()) {
-        int u = pq.top().second, du = pq.top().first; pq.pop();
-        if (du != d[u]) continue;
-        FOR(v, 1, n) if (u != v) {
-            ll uv = 1LL * a[u] * a[v];
-            if (minimize(d[v], du + uv)) pq.push(ii(d[v], v));
-        }
-    }
-}
+int n, q, a[N];
+set <ii> S;
 
 
 #define FILE_IO
@@ -102,30 +83,30 @@ signed main(void) {
     freopen("MULTIGRAPH.OUT","w",stdout);
     #endif
     
-    Read(n); Read(q_sz);
-    FOR(i,1,n) Read(a[i]);
+    Read(n); Read(q);
+    FOR(i,1,n) {
+        Read(a[i]);
+        S.insert(ii(a[i], i));
+    }
 
-    FOR(i,1,q_sz) {
-        Read(q[i].first);
-        Read(q[i].second.first);
-        Read(q[i].second.second);
+    int type, u, v; 
+    FOR(i,1,q) {
+        Read(type); Read(u); Read(v);
 
-        if (q[i].first == 1) {
-            FOR(i,1,n) d[i].clear();
-            a[q[i].second.first] = q[i].second.second;
+        if (type == 1) {
+            S.erase(ii(a[u], u));
+            a[u] = v;
+            S.insert(ii(a[u], u));
             continue;
         }
 
         /* q[i].first == 2 */
 
-        if (q[i].second.first == q[i].second.second) {
-            putchar('0');
-            putchar(endl);
-            continue;
-        }
+        ll res = 1LL * (a[u] + a[v]) * (S.begin() -> first);
+        minimize(res, 1LL * a[u] * a[v]);
+        if (u == v) res = 0;
 
-        if (d[q[i].second.first].empty()) dijkstra(q[i].second.first, d[q[i].second.first]);
-        Write(d[q[i].second.first][q[i].second.second]);
+        Write(res);
         putchar(endl);
     }
 
