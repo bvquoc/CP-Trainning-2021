@@ -1,4 +1,5 @@
-https://pvhoi.contest.codeforces.com/group/k46O5NclDq/contests
+Codeforces: https://pvhoi.contest.codeforces.com/group/k46O5NclDq/contests
+Ranking: https://codeforces.com/spectator/ranklist/a30eec8aaa2fcb4c42b8e6d9ee6489b8
 
 307860 | ag_11_anhkhoa | pqqmguif | AG-11 Vo Hoang Anh Khoa 
 307860 | ag_11_hoangquan | qfjwscuy | AG-11 Ta Hoang Quan 
