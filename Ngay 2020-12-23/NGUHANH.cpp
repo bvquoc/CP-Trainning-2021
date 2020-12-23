@@ -73,10 +73,10 @@ signed main(void) {
     n = a.size();
     
     int res = 0;
-    REP(i, n) if (a[i] == '0' || a[i] == '5') (res += MASK(i)) % MOD;
+    REP(i, n) if (a[i] == '0' || a[i] == '5') (res += pw(2ll, i)) % MOD;
 
-    int t = pw((MASK(n)-1), MOD - 2);
-    t = (t * (MASK(k*n) - 1)) % MOD;
+    int t = pw((pw(2ll, n) - 1), MOD - 2);
+    t = (t * (pw(2ll, k*n) - 1)) % MOD;
     (res *= t) % MOD;
     cout << res;
     // cerr << "\nExecution time: " << (double) clock() / 1000.0 << " second(s).";
